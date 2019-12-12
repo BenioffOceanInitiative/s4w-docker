@@ -28,7 +28,7 @@ Run the following commands:
 - NOTE: Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). The [docker-compose.yml](https://github.com/BenioffOceanInitiative/s4w-docker/blob/master/docker-compose.yml) uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
 
 ```bash
-PASSWORD=CHANGEME
+echo "PASSWORD=CHANGEME" > .env
 git clone https://github.com/BenioffOceanInitiative/s4w-docker.git
 cd s4w-docker
 # git pull; docker-compose up --build -d
