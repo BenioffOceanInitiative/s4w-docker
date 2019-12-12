@@ -5,18 +5,16 @@ Docker server software setup for Ships for Whales
 
 ### Software
 
-- [PostGIS](https://postgis.net)
-  - docker: [kartoza/postgis:11.0-2.5](https://hub.docker.com/r/kartoza/postgis)
-- [GeoServer](http://geoserver.org)
-  - docker: [kartoza/geoserver:2.15.2](https://hub.docker.com/r/kartoza/geoserver)
+- [WordPress](https://wordpress.com)
 - [Shiny](https://shiny.rstudio.com)
 - [RStudio](https://rstudio.com/products/rstudio/#rstudio-server)
-- [WordPress](https://wordpress.com)
+- [GeoServer](http://geoserver.org)
+- [PostGIS](https://postgis.net)
 
-References:
+### References
 
-- [docker-geoserver/docker-compose.yml at master · kartoza/docker-geoserver](https://github.com/kartoza/docker-geoserver/blob/master/docker-compose.yml)
 - [Quickstart: Compose and WordPress | Docker Documentation](https://docs.docker.com/compose/wordpress/)
+- [docker-compose.yml · kartoza/docker-geoserver](https://github.com/kartoza/docker-geoserver/blob/master/docker-compose.yml)
 
 ### Dependencies
 
@@ -25,7 +23,9 @@ References:
 
 ### Installation
 
-Run the following commands. Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). Script below uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
+Run the following commands:
+
+- NOTE: Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). The [docker-compose.yml](https://github.com/BenioffOceanInitiative/s4w-docker/blob/master/docker-compose.yml) uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
 
 ```bash
 PASSWORD=CHANGEME
