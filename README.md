@@ -31,6 +31,7 @@ Run the following commands:
 PASSWORD=CHANGEME
 git clone https://github.com/BenioffOceanInitiative/s4w-docker.git
 cd s4w-docker
+# git pull; docker-compose up --build -d
 docker-compose up --build -d
 docker-compose up
 ```
