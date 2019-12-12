@@ -13,7 +13,7 @@ services:
     image: jwilder/nginx-proxy
     environment:
       - DEFAULT_HOST: cms.ships4whales.org
-      - VIRTUAL_HOST_SPECIFIC_PORT: true
+      - VIRTUAL_HOST_SPECIFIC_PORT: 'true'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
@@ -107,7 +107,7 @@ services:
     restart: always
     environment:
       - VIRTUAL_HOST: rstudio.mhk-env.us:8787,shiny.mhk-env.us:3838
-      - ROOT: true
+      - ROOT: 'true'
       - USER: admin
       - PASSWORD: "${PASSWORD}" 
     expose:
