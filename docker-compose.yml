@@ -1,0 +1,116 @@
+version: '3.3'
+
+volumes:
+  geodb-backups:
+  geoserver-data:
+  geodb-data:
+  cmsdb-data:
+
+services:
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    environment:
+      - DEFAULT_HOST: cms.ships4whales.org
+      - VIRTUAL_HOST_SPECIFIC_PORT: true
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
+    restart: on-failure
+    ports:
+      - 80:80
+
+  geodb:
+    image: kartoza/postgis:11.0-2.5
+    environment:
+      - POSTGRES_DBNAME: geodb
+      - POSTGRES_USER: admin
+      - POSTGRES_PASSWORD: "${PASSWORD}"
+    volumes:
+      - geodb-data:/var/lib/postgresql
+    restart: on-failure
+    healthcheck:
+      test: 'exit 0'
+    ports:
+      - 5432:5432
+      
+  geodb-backup:
+    image: kartoza/pg-backup:11.0
+    volumes:
+      - geodb-backups:/backups
+    environment:
+      - POSTGRES_HOST: db
+      - POSTGRES_PORT: 5432
+      - POSTGRES_DBNAME: s4w
+      - POSTGRES_USER: admin
+      - POSTGRES_PASS: "${PASSWORD}"
+      - DUMPPREFIX: PG_db
+    restart: on-failure
+    depends_on:
+      geodb:
+        condition: service_healthy  
+  
+  geoserver:
+    image: kartoza/geoserver:2.15.2
+    environment:
+      - VIRTUAL_HOST: geoserver.ships4whales.org    
+      - USERNAME: admin
+      - PASS: "${PASSWORD}"
+      - GEOSERVER_ADMIN_PASSWORD: "${PASSWORD}"
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    ports:
+      - 8080:8080
+    restart: on-failure
+    depends_on:
+      geodb:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  cmsdb:
+    image: mysql:8.0.18
+    volumes:
+      - cmsdb-data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD: "${PASSWORD}"
+      - MYSQL_DATABASE: cmsdb
+      - MYSQL_USER: admin
+      - MYSQL_PASSWORD: "${PASSWORD}"
+    ports:
+      - 3306:3306
+       
+  cms:
+    depends_on:
+      - cmsdb
+    image: wordpress:php7.4-fpm
+    ports:
+      - 8000:80
+    restart: always
+    environment:
+      - VIRTUAL_HOST: cms.ships4whales.org
+      - WORDPRESS_DB_HOST: cmsdb:3306
+      - WORDPRESS_DB_USER: admin
+      - WORDPRESS_DB_PASSWORD: "${PASSWORD}"
+      - WORDPRESS_DB_NAME: cmsdb
+
+  rstudio:
+    build: ./rstudio-shiny
+    image: rstudio-shiny:s4w
+    restart: always
+    environment:
+      - VIRTUAL_HOST: rstudio.mhk-env.us:8787,shiny.mhk-env.us:3838
+      - ROOT: true
+      - USER: admin
+      - PASSWORD: "${PASSWORD}" 
+    expose:
+      - 8787
+      - 3838
+
+
+
+ 
