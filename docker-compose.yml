@@ -5,6 +5,7 @@ volumes:
   geoserver-data:
   geodb-data:
   cmsdb-data:
+  shiny-apps:
 
 services:
 
@@ -101,6 +102,8 @@ services:
   rstudio:
     build: ./rstudio-shiny
     image: rstudio-shiny:s4w
+    volumes:
+      - shiny-apps:/srv/shiny-server
     restart: always
     environment:
       - VIRTUAL_HOST: rstudio.mhk-env.us:8787,shiny.mhk-env.us:3838
