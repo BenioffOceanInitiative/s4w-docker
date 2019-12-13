@@ -194,10 +194,39 @@ tmpfs           763M     0  763M   0% /run/user/1002
 50GB volume mounted on /data
 
 
+restart daemon:
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
+
+apply updates after switching to `wordpress:php7.4-apache`:
+
+```bash
+cd /home/bbest/s4w-docker
+git pull
+docker-compose up -d
+docker-compose restart
+```
+
+
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.8. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.8. Set the 'ServerName' directive globally to suppress this message
+[Fri Dec 13 20:15:17.256867 2019] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.4.0 configured -- resuming normal operations
+[Fri Dec 13 20:15:17.256910 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+172.18.0.2 - - [13/Dec/2019:20:15:35 +0000] "GET / HTTP/1.1" 302 362 "-" "curl/7.58.0"
+172.18.0.2 - - [13/Dec/2019:20:15:40 +0000] "GET / HTTP/1.1" 302 362 "-" "curl/7.58.0"
+[Fri Dec 13 20:16:29.210551 2019] [mpm_prefork:notice] [pid 1] AH00170: caught SIGWINCH, shutting down gracefully
+[13-Dec-2019 20:16:32 UTC] PHP Warning:  mysqli::__construct(): (HY000/2002): Connection refused in Standard input code on line 22
+
+MySQL Connection Error: (2002) Connection refused
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.8. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.18.0.8. Set the 'ServerName' directive globally to suppress this message
+[Fri Dec 13 20:16:35.786154 2019] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.4.0 configured -- resuming normal operations
+[Fri Dec 13 20:16:35.786200 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+172.18.0.2 - - [13/Dec/2019:20:18:17 +0000] "GET / HTTP/1.1" 302 362 "-" "curl/7.58.0"
+
+
 
 ### Debugging
 

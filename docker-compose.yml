@@ -1,10 +1,10 @@
 version: '3.3'
 
 volumes:
-  geodb-backups:
+  postgis-backups:
   geoserver-data:
-  geodb-data:
-  cmsdb-data:
+  postgis-data:
+  mysql-data:
   shiny-apps:
 
 services:
@@ -12,33 +12,33 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     environment:
-      DEFAULT_HOST: cms.ships4whales.org
+      DEFAULT_HOST: wp.ships4whales.org
       VIRTUAL_HOST_SPECIFIC_PORT: 'true'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
     restart: on-failure
     ports:
-      - 80:80
+      - 80
 
-  geodb:
+  postgis:
     image: kartoza/postgis:11.0-2.5
     environment:
-      POSTGRES_DBNAME: geodb
+      POSTGRES_DBNAME: gis
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: "${PASSWORD}"
     volumes:
-      - geodb-data:/var/lib/postgresql
+      - postgis-data:/var/lib/postgresql
     restart: on-failure
     healthcheck:
       test: 'exit 0'
     ports:
-      - 5432:5432
+      - 5432
       
-  geodb-backup:
+  postgis-backup:
     image: kartoza/pg-backup:11.0
     volumes:
-      - geodb-backups:/backups
+      - postgis-backups:/backups
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
@@ -48,7 +48,7 @@ services:
       DUMPPREFIX: PG_db
     restart: on-failure
     depends_on:
-      - geodb
+      - gis
       
   geoserver:
     image: kartoza/geoserver:2.15.2
@@ -60,44 +60,44 @@ services:
     volumes:
       - geoserver-data:/opt/geoserver/data_dir
     ports:
-      - 8080:8080
+      - 8080
     restart: on-failure
     depends_on:
-      - geodb
+      - postgis
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
 
-  cmsdb:
+  mysql:
     image: mysql:8.0.18
     volumes:
-      - cmsdb-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "${PASSWORD}"
-      MYSQL_DATABASE: cmsdb
+      MYSQL_DATABASE: wordpress
       MYSQL_USER: admin
       MYSQL_PASSWORD: "${PASSWORD}"
     ports:
-      - 3306:3306
+      - 3306
        
-  cms:
+  wordpress:
     depends_on:
-      - cmsdb
+      - mysql
     image: wordpress:php7.4-apache
     ports:
-      - 8000:8000
+      - 9000
     restart: always
     environment:
-      VIRTUAL_HOST: cms.ships4whales.org
-      WORDPRESS_DB_HOST: cmsdb:3306
+      VIRTUAL_HOST: wp.ships4whales.org
+      WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: admin
       WORDPRESS_DB_PASSWORD: "${PASSWORD}"
-      WORDPRESS_DB_NAME: cmsdb
+      WORDPRESS_DB_NAME: wordpress
 
-  rstudio:
+  rstudio-shiny:
     build: ./rstudio-shiny
     image: rstudio-shiny:s4w
     volumes:
