@@ -88,7 +88,7 @@ services:
       - cmsdb
     image: wordpress:php7.4-fpm
     ports:
-      - 8000:80
+      - 8000:8000
     restart: always
     environment:
       VIRTUAL_HOST: cms.ships4whales.org
@@ -104,7 +104,7 @@ services:
       - shiny-apps:/srv/shiny-server
     restart: always
     environment:
-      VIRTUAL_HOST: rstudio.mhk-env.us:8787,shiny.mhk-env.us:3838
+      VIRTUAL_HOST: rstudio.ships4whales.org:8787,shiny.ships4whales.org:3838
       ROOT: 'true'
       USER: admin
       PASSWORD: "${PASSWORD}" 
