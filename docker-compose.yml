@@ -42,13 +42,13 @@ services:
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
-      POSTGRES_DBNAME: s4w
+      POSTGRES_DBNAME: gis
       POSTGRES_USER: admin
       POSTGRES_PASS: "${PASSWORD}"
-      DUMPPREFIX: PG_db
+      DUMPPREFIX: PG_gis
     restart: on-failure
     depends_on:
-      - gis
+      - postgis
       
   geoserver:
     image: kartoza/geoserver:2.15.2
