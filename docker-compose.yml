@@ -86,7 +86,7 @@ services:
   cms:
     depends_on:
       - cmsdb
-    image: wordpress:php7.4-fpm
+    image: wordpress:php7.4-apache
     ports:
       - 8000:8000
     restart: always
