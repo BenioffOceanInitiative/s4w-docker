@@ -16,6 +16,8 @@ Docker server software setup for Ships for Whales
 - [Quickstart: Compose and WordPress | Docker Documentation](https://docs.docker.com/compose/wordpress/)
 - [docker-compose.yml · kartoza/docker-geoserver](https://github.com/kartoza/docker-geoserver/blob/master/docker-compose.yml)
 
+- [How To Install WordPress With Docker Compose | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose)
+
 ### Dependencies
 
 - [Docker](https://docs.docker.com/engine/installation/)
@@ -117,6 +119,22 @@ Error setting machine configuration from flags provided: amazonec2 driver requir
 ```
 
 
+```bash
+docker inspect s4w-docker_nginx-proxy_1
+```
+
+```
+  "Networks": {
+      "s4w-docker_default": {
+          "Gateway": "172.18.0.1",
+          "IPAddress": "172.18.0.4",
+```
+
+curl http://172.18.0.4:8080
+
+
+docker inspect -f "{{ .NetworkSettings.IPAddress }}" s4w-docker_default
+
 ### Installation
 
 Run the following commands:
@@ -207,6 +225,8 @@ cd /home/bbest/s4w-docker
 git pull
 docker-compose up -d
 docker-compose restart
+
+docker-compose stop
 ```
 
 
@@ -225,6 +245,42 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 [Fri Dec 13 20:16:35.786154 2019] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.38 (Debian) PHP/7.4.0 configured -- resuming normal operations
 [Fri Dec 13 20:16:35.786200 2019] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 172.18.0.2 - - [13/Dec/2019:20:18:17 +0000] "GET / HTTP/1.1" 302 362 "-" "curl/7.58.0"
+
+
+#### simplest web server
+
+docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+
+docker run --name nginx -p 80:80 -d nginx
+
+docker inspect nginx
+
+curl http://localhost
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
 
 
 

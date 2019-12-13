@@ -99,7 +99,7 @@ services:
 
   rstudio-shiny:
     build: ./rstudio-shiny
-    image: rstudio-shiny:s4w
+    image: bdbest/rstudio-shiny:s4w
     volumes:
       - shiny-apps:/srv/shiny-server
     restart: always
