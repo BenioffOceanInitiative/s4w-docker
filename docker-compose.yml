@@ -92,7 +92,7 @@ services:
     restart: always
     environment:
       VIRTUAL_HOST: wp.ships4whales.org
-      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_USER: admin
       WORDPRESS_DB_PASSWORD: "${PASSWORD}"
       WORDPRESS_DB_NAME: wordpress
