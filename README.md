@@ -9,7 +9,7 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 * [Server software](#server-software)
 * [Shell into server](#shell-into-server)
-* [Install docker &amp; docker-compose](#install-docker--docker-compose)
+* [Install docker, docker-compose](#install-docker-docker-compose)
    * [docker](#docker)
    * [docker-compose](#docker-compose)
    * [Move docker storage](#move-docker-storage)
