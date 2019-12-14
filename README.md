@@ -2,7 +2,10 @@
 Docker server software setup for Ships for Whales
 
 Contents:
-<!-- regenerate toc: `cat README.md | ./gh-md-toc -` -->
+<!-- 
+To update table of contents run: `cat README.md | ./gh-md-toc -` 
+Uses: https://github.com/ekalinin/github-markdown-toc
+-->
 
 * [Server software](#server-software)
 * [Shell into server](#shell-into-server)
