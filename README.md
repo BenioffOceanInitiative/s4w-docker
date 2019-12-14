@@ -18,6 +18,18 @@ Docker server software setup for Ships for Whales
 
 - [How To Install WordPress With Docker Compose | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose)
 
+## TODO
+
+- try test migration of volumes in /data/docker on a local machine
+- add https: 
+  - "Step 4 — Obtaining SSL Certificates and Credentials" in [How To Install WordPress With Docker Compose | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose#step-4-%E2%80%94-obtaining-ssl-certificates-and-credentials)
+  - docker-letsencrypt-nginx-proxy-companion:
+  - [Hosting multiple SSL-enabled sites with Docker and Nginx | Serverwise](https://blog.ssdnodes.com/blog/host-multiple-ssl-websites-docker-nginx/)
+  - cron job to renew
+- add phpmyadmin
+  - [Setting up WordPress with Docker - Containerizers](https://cntnr.io/setting-up-wordpress-with-docker-262571249d50)
+  - 
+
 ### Dependencies
 
 - [Docker](https://docs.docker.com/engine/installation/)
@@ -142,11 +154,23 @@ Run the following commands:
 - NOTE: Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). The [docker-compose.yml](https://github.com/BenioffOceanInitiative/s4w-docker/blob/master/docker-compose.yml) uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
 
 ```bash
+# set environment variables
 echo "PASSWORD=CHANGEME" > .env
+echo "HOST=ships4whales.org" >> .env
+cat .env
+
+# get latest docker-compose files
 git clone https://github.com/BenioffOceanInitiative/s4w-docker.git
 cd ~/s4w-docker
-# git pull; docker-compose up --build -d
-docker-compose up --build -d
+
+# launch
+docker-compose up -d
+
+# OR update
+git pull; docker-compose up -d
+
+# OR build if Dockerfile updated in subfolder
+git pull; docker-compose up --build -d
 ```
 
 ```
@@ -247,8 +271,72 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 172.18.0.2 - - [13/Dec/2019:20:18:17 +0000] "GET / HTTP/1.1" 302 362 "-" "curl/7.58.0"
 
 
+#### push 
+
+https://docs.docker.com/compose/reference/push/
+
+on server:
+
+```bash
+docker login --username=bdbest
+docker-compose push
+```
+
+```
+Pushing rstudio-shiny (bdbest/rstudio-shiny:s4w)...
+```
+
+now on local machine:
+```bash
+cd ~/github/s4w-docker
+docker ps -a
+docker-compose up -d
+```
+
+```bash
+# stop all running containers
+docker stop $(docker ps -q)
+
+# remove all containers
+docker rm $(docker ps -aq)
+
+# remove all image
+docker rmi $(docker images -q)
+```
+
+sudo vi /etc/hosts
+
+```
+# dev
+127.0.0.1       ships4whales.org
+```
+
+
+docker stop $(docker ps -q)
+docker-compose up -d
+
+
+#### post docker commands for rstudio-shiny
+
+
+1. Setup **permissions and shortcuts** for admin in rstudio.
+    
+    After logging into rstudio.ships4hwales.org, to go to Terminal window and run:
+    
+    ```bash
+    sudo su -
+    ln -s /srv/shiny-server /home/admin/shiny-apps
+    ln -s /var/log/shiny-server /home/admin/shiny-logs
+    chown -R admin /srv/shiny-server
+    ```
+  
+1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
+
+1. Go to shiny-logs and run shiny_ships to generate cache which otherwise times out when visiting site.
+
 #### simplest web server
 
+```
 docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
 
 docker run --name nginx -p 80:80 -d nginx
@@ -281,8 +369,7 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
-
-
+```
 
 ### Debugging
 

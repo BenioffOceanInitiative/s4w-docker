@@ -17,6 +17,7 @@ RUN install2.r --error \
   units \
   RColorBrewer \
   RPostgreSQL \
+  RPostgres \
   shinydashboard
   
   # already included: https://tidyverse.tidyverse.org
@@ -37,3 +38,4 @@ RUN export ADD=shiny && bash /etc/cont-init.d/add
 # install Shiny apps
 RUN cd /srv && rm -rf shiny-server && \
     git clone https://github.com/BenioffOceanInitiative/ships4whales-app.git shiny-server
+    
