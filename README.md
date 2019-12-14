@@ -54,11 +54,11 @@ Uses: https://github.com/ekalinin/github-markdown-toc
     ssh -i ~/.ssh/id_rsa.pem bbest@ec2-52-27-163-27.us-west-2.compute.amazonaws.com
     ```
 
-## Install `docker` & `docker-compose`
+## Install docker, docker-compose
 
 Using Ubuntu on Amazon EC2 with 40 GB Amazon EBS volume at `/data` (where linked `/var/lib/docker`) and connecting to Amazon RDS Postgres.
 
-### `docker`
+### docker
 
 Reference:
 
@@ -102,7 +102,7 @@ sudo usermod -aG docker ${USER}
 su - ${USER}
 ```
 
-### `docker-compose`
+### docker-compose
 
 References:
 
