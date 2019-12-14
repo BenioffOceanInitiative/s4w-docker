@@ -308,6 +308,9 @@ docker rm $(docker ps -aq)
 
 # remove all image
 docker rmi $(docker images -q)
+
+# remove all stopped containers
+docker container prune
 ```
 
 ### Inspect docker logs
