@@ -9,7 +9,7 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 * [Server software](#server-software)
 * [Shell into server](#shell-into-server)
-* [Install docker &amp; docker-compose](#install-docker--docker-compose)
+* [Install docker, docker-compose](#install-docker-docker-compose)
    * [docker](#docker)
    * [docker-compose](#docker-compose)
    * [Move docker storage](#move-docker-storage)
@@ -30,17 +30,17 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   - [WordPress](https://wordpress.com)<br>
     **ships4whales.org**
   - [MySQL](https://www.mysql.com/)<br>
-    ships4whales.org**:3306**
+    ships4whales.org **:3306**
 - Analytical apps:
   - [Shiny](https://shiny.rstudio.com)<br>
-    **shiny.**ships4whales.org
+    **shiny.** ships4whales.org
   - [RStudio](https://rstudio.com/products/rstudio/#rstudio-server)<br>
-    **rstudio.**ships4whales.org
+    **rstudio.** ships4whales.org
 - Spatial engine:
   - [GeoServer](http://geoserver.org)<br>
-    **gs.**ships4whales.org
+    **gs.** ships4whales.org
   - [PostGIS](https://postgis.net)<br>
-    ships4whales.org**:5432**
+    ships4whales.org **:5432**
 - Containerized using:
   - [docker](https://docs.docker.com/engine/installation/)
   - [docker-compose](https://docs.docker.com/compose/install/)
@@ -60,11 +60,11 @@ New public ip address: 34.220.29.172
     ssh -i ~/.ssh/id_rsa.pem bbest@ec2-34-220-29-172.us-west-2.compute.amazonaws.com
     ```
 
-## Install `docker` & `docker-compose`
+## Install docker, docker-compose
 
 Using Ubuntu on Amazon EC2 with 40 GB Amazon EBS volume at `/data` (where linked `/var/lib/docker`) and connecting to Amazon RDS Postgres.
 
-### `docker`
+### docker
 
 Reference:
 
@@ -108,7 +108,7 @@ sudo usermod -aG docker ${USER}
 sudo su - ${USER}
 ```
 
-### `docker-compose`
+### docker-compose
 
 References:
 
