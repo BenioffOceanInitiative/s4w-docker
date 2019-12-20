@@ -12,10 +12,12 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 * [Install docker, docker-compose](#install-docker-docker-compose)
    * [docker](#docker)
    * [docker-compose](#docker-compose)
-   * [Move docker storage](#move-docker-storage)
+   * [OLD: Move docker storage](#old-move-docker-storage)
+   * [update 2019-12-17](#update-2019-12-17)
 * [Build containers](#build-containers)
    * [Test webserver](#test-webserver)
    * [ships4whales](#ships4whales)
+   * [DNS manage *.ships4whales.org](#dns-manage-ships4whalesorg)
    * [rstudio-shiny](#rstudio-shiny)
 * [Docker maintenance](#docker-maintenance)
    * [Push docker image](#push-docker-image)
@@ -23,6 +25,7 @@ Uses: https://github.com/ekalinin/github-markdown-toc
    * [Operate on all docker containers](#operate-on-all-docker-containers)
    * [Inspect docker logs](#inspect-docker-logs)
 * [TODO](#todo)
+
 
 ## Server software
 
@@ -47,11 +50,6 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   - [nginx-proxy](https://github.com/jwilder/nginx-proxy)
 
 ## Shell into server
-
-
-New public ip address: 34.220.29.172
-
-- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns)
 
 1. Connect to UCSB VPN via Secure Pulse
 1. SSH, eg for Ben:
@@ -126,7 +124,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-### Move docker storage
+### OLD: Move docker storage
 
 Because ran out of room in root drive `/` when subsequently install images:
 
@@ -264,6 +262,17 @@ docker-compose restart
 # OR stop
 docker-compose stop
 ```
+
+### DNS manage *.ships4whales.org
+
+- Using new public ip address: `34.220.29.172`
+
+- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns), plus the following subdomains pointing to `34.220.29.172` added under **Custom resource records** with Type **A** and Data **34.220.29.172**:
+
+  - wp.ships4whales.org
+  - gs.ships4whales.org
+  - rstudio.ships4whales.org
+  - shiny.ships4whales.org
 
 ### rstudio-shiny 
 
