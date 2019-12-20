@@ -25,6 +25,10 @@ services:
       - 80:80
       # TODO: add https
       #- 443:443
+    depends_on:
+      - geoserver
+      - wordpress
+      - rstudio-shiny
 
   postgis:
     container_name: s4w-postgis

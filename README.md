@@ -48,10 +48,16 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 ## Shell into server
 
+
+New public ip address: 34.220.29.172
+
+- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns)
+
 1. Connect to UCSB VPN via Secure Pulse
 1. SSH, eg for Ben:
     ```bash
-    ssh -i ~/.ssh/id_rsa.pem bbest@ec2-52-27-163-27.us-west-2.compute.amazonaws.com
+    
+    ssh -i ~/.ssh/id_rsa.pem bbest@ec2-34-220-29-172.us-west-2.compute.amazonaws.com
     ```
 
 ## Install `docker` & `docker-compose`
@@ -99,7 +105,7 @@ sudo systemctl status docker
 sudo usermod -aG docker ${USER}
 
 # to apply the new group membership, log out of the server and back in, or type the following:
-su - ${USER}
+sudo su - ${USER}
 ```
 
 ### `docker-compose`
@@ -152,6 +158,22 @@ sudo systemctl stop docker
 sudo mv /var/lib/docker /data/docker
 sudo ln -s /data/docker /var/lib/docker
 sudo systemctl start docker
+```
+
+### update 2019-12-17
+
+```
+bbest@ip-10-242-0-20:~$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            3.8G     0  3.8G   0% /dev
+tmpfs           763M  860K  762M   1% /run
+/dev/nvme1n1p1   49G  1.8G   47G   4% /
+tmpfs           3.8G     0  3.8G   0% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           3.8G     0  3.8G   0% /sys/fs/cgroup
+/dev/loop0       90M   90M     0 100% /snap/core/7713
+/dev/loop1       18M   18M     0 100% /snap/amazon-ssm-agent/1480
+tmpfs           763M     0  763M   0% /run/user/1003
 ```
 
 ## Build containers
