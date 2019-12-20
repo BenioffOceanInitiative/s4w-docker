@@ -267,12 +267,12 @@ docker-compose stop
 
 - Using new public ip address: `34.220.29.172`
 
-- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns), plus the following subdomains pointing to `34.220.29.172` added under **Custom resource records** with Type **A** and Data **34.220.29.172**:
+- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
 
-  - wp.ships4whales.org
-  - gs.ships4whales.org
-  - rstudio.ships4whales.org
-  - shiny.ships4whales.org
+  - **wp**
+  - **gs**
+  - **rstudio**
+  - **shiny**
 
 ### rstudio-shiny 
 
