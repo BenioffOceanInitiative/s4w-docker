@@ -263,6 +263,16 @@ docker-compose restart
 docker-compose stop
 ```
 
+#### plumber test
+
+```bash
+curl "http://localhost:8888/echo?msg=hello"
+```
+
+```
+{"msg":["The message is: 'hello'"]}
+```
+
 ### DNS manage *.ships4whales.org
 
 - Using new public ip address: `34.220.29.172`
