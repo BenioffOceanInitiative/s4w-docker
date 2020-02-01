@@ -44,5 +44,5 @@ RUN cd /srv && rm -rf shiny-server && \
 RUN cd /srv && \
     git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
 EXPOSE 8888
-# ENTRYPOINT ["R", "-f", "/etc/plumber.R", "--slave"]
-ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]
+#ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]
+ENTRYPOINT ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
