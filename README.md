@@ -265,6 +265,8 @@ docker-compose stop
 
 #### plumber test
 
+http://api.ships4whales.org/echo?msg=hello
+
 ```bash
 curl "http://localhost:8888/echo?msg=hello"
 ```
