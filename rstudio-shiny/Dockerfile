@@ -14,6 +14,7 @@ RUN install2.r --error \
   gstat \
   here \
   leaflet \
+  plumber \
   units \
   RColorBrewer \
   RPostgreSQL \
@@ -39,3 +40,9 @@ RUN export ADD=shiny && bash /etc/cont-init.d/add
 RUN cd /srv && rm -rf shiny-server && \
     git clone https://github.com/BenioffOceanInitiative/ships4whales-app.git shiny-server
     
+# install api using plumber
+RUN cd /srv && \
+    git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
+EXPOSE 8888
+# ENTRYPOINT ["R", "-f", "/etc/plumber.R", "--slave"]
+ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]

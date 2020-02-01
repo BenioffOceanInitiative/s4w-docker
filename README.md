@@ -287,6 +287,11 @@ Haven't figured out how to RUN these commands after user admin is created in rst
     ln -s /srv/shiny-server /home/admin/shiny-apps
     ln -s /var/log/shiny-server /home/admin/shiny-logs
     chown -R admin /srv/shiny-server
+    
+    # trying with plumber
+    cd ~; git clone https://github.com/BenioffOceanInitiative/ws-api
+    cd ws-api
+    Rscript run_api.R
     ```
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
