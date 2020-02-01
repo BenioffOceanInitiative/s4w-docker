@@ -38,20 +38,14 @@ RUN export ADD=shiny && bash /etc/cont-init.d/add
 
 # install Shiny apps
 RUN cd /srv && rm -rf shiny-server && \
-    git clone https://github.com/BenioffOceanInitiative/ships4whales-app.git shiny-server
+    git clone https://github.com/BenioffOceanInitiative/ws-apps.git shiny-server
     
 # install api using plumber
 RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
 
 EXPOSE 8888
 
-#ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]
-#ENTRYPOINT ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
-#CMD ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
-# only one CMD per Dockerfile, so run both RStudio & R plumber API
-# CMD /init && Rscript /srv/ws-api/run_api.R
-
-#ENV PLUMBER_R /srv/ws-api/run_api.R
-#COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
+COPY symlinks.sh /srv/symlinks.sh
+RUN chmod +x /srv/symlinks.sh
 
 CMD /init & Rscript /srv/ws-api/run_api.R

@@ -255,6 +255,7 @@ git pull; docker-compose up -d
 
 # OR build if Dockerfile updated in subfolder
 git pull; docker-compose up --build -d
+docker exec s4w-rstudio-shiny /srv/symlinks.sh
 
 # OR reload
 docker-compose restart
@@ -296,14 +297,7 @@ Haven't figured out how to RUN these commands after user admin is created in rst
     
     ```bash
     sudo su -
-    ln -s /srv/shiny-server /home/admin/shiny-apps
-    ln -s /var/log/shiny-server /home/admin/shiny-logs
-    chown -R admin /srv/shiny-server
     
-    # trying with plumber
-    cd ~; git clone https://github.com/BenioffOceanInitiative/ws-api
-    cd ws-api
-    Rscript run_api.R
     ```
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
