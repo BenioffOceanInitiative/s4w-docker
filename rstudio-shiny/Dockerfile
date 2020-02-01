@@ -54,4 +54,4 @@ EXPOSE 8888
 #ENV PLUMBER_R /srv/ws-api/run_api.R
 #COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
 
-CMD /init & Rscript /srv/ws-api/run_api.R &
+CMD /init & Rscript /srv/ws-api/run_api.R
