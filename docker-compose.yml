@@ -29,6 +29,7 @@ services:
       - geoserver
       - wordpress
       - rstudio-shiny
+      - plumber
 
   postgis:
     container_name: s4w-postgis
@@ -130,3 +131,13 @@ services:
       - 8787:8787
       - 3838:3838
 
+  plumber:
+    container_name: s4w-plumber
+    build: ./plumber
+    #volumes:
+    #  - shiny-apps:/srv/shiny-server
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: api.$HOST
+    ports:
+      - 8888:8000
