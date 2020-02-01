@@ -43,6 +43,6 @@ RUN cd /srv && rm -rf shiny-server && \
 # install api using plumber
 RUN cd /srv && \
     git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
-EXPOSE 8888
+#EXPOSE 8888
 #ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]
 ENTRYPOINT ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
