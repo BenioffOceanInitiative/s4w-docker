@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # source of this script: https://docs.docker.com/config/containers/multi-service_container/
 
