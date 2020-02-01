@@ -53,5 +53,5 @@ ENV PLUMBER_R /srv/ws-api/run_api.R
 # only one CMD per Dockerfile, so run both RStudio & R plumber API
 # CMD /init && Rscript /srv/ws-api/run_api.R
 
-COPY run_rstudio_plumber.sh run_rstudio_plumber.sh
-CMD ./run_rstudio_plumber.sh
+COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
+#CMD ./run_rstudio_plumber.sh
