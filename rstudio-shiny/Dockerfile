@@ -45,13 +45,13 @@ RUN cd /srv git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-ap
 
 EXPOSE 8888
 
-ENV PLUMBER_R /srv/ws-api/run_api.R
-
 #ENTRYPOINT ["Rscript", "/srv/ws-api/run_api.R"]
 #ENTRYPOINT ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
 #CMD ["R", "-f", "/srv/ws-api/run_api.R", "--slave"]
 # only one CMD per Dockerfile, so run both RStudio & R plumber API
 # CMD /init && Rscript /srv/ws-api/run_api.R
 
-COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
-#CMD ./run_rstudio_plumber.sh
+#ENV PLUMBER_R /srv/ws-api/run_api.R
+#COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
+
+CMD /init & Rscript &
