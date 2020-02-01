@@ -41,7 +41,7 @@ RUN cd /srv && rm -rf shiny-server && \
     git clone https://github.com/BenioffOceanInitiative/ships4whales-app.git shiny-server
     
 # install api using plumber
-RUN cd /srv git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
+RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
 
 EXPOSE 8888
 
@@ -54,4 +54,4 @@ EXPOSE 8888
 #ENV PLUMBER_R /srv/ws-api/run_api.R
 #COPY run_rstudio_plumber.sh /run_rstudio_plumber.sh
 
-CMD /init & Rscript &
+CMD /init & Rscript /srv/ws-api/run_api.R &
