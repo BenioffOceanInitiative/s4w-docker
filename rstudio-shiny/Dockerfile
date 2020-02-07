@@ -48,4 +48,6 @@ EXPOSE 8888
 COPY symlinks.sh /srv/symlinks.sh 
 RUN chmod +x /srv/symlinks.sh 
 
-CMD /init & Rscript /srv/ws-api/run_api.R 
+# TODO: run multiple services more elegantly
+# https://docs.docker.com/config/containers/multi-service_container/
+CMD /init & Rscript /srv/ws-api/run_api.R
