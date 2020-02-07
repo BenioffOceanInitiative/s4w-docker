@@ -55,4 +55,5 @@ RUN chmod +x /srv/symlinks.sh
 
 # TODO: run multiple services more elegantly
 # https://docs.docker.com/config/containers/multi-service_container/
-CMD /init & Rscript /srv/ws-api/run_api.R
+# CMD /init & Rscript /srv/ws-api/run_api.R
+CMD /init
