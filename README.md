@@ -254,7 +254,10 @@ docker-compose up -d
 git pull; docker-compose up -d
 
 # OR build if Dockerfile updated in subfolder
-git pull; docker-compose up --build --force-recreate -d
+git pull
+docker-compose up --build --force-recreate -d
+docker-compose up -d --no-deps --build rstudio-shiny
+docker-compose up -d --force-recreate --no-deps --build rstudio-shiny
 docker exec s4w-rstudio-shiny /srv/symlinks.sh
 
 # OR reload
