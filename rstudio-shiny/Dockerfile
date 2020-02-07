@@ -41,11 +41,11 @@ RUN cd /srv && rm -rf shiny-server && \
     git clone https://github.com/BenioffOceanInitiative/ws-apps.git shiny-server
     
 # install api using plumber
-RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api
+RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api 
 
 EXPOSE 8888
 
-COPY symlinks.sh /srv/symlinks.sh
-RUN chmod +x /srv/symlinks.sh
+COPY symlinks.sh /srv/symlinks.sh 
+RUN chmod +x /srv/symlinks.sh 
 
-CMD /init & Rscript /srv/ws-api/run_api.R
+CMD /init & Rscript /srv/ws-api/run_api.R 

@@ -275,6 +275,13 @@ curl "http://localhost:8888/echo?msg=hello"
 ```
 {"msg":["The message is: 'hello'"]}
 ```
+#### restart plumber api
+
+ps | grep run_api
+kill 7
+sudo Rscript /srv/ws-api/run_api.R
+
+docker restart s4w-rstudio-shiny
 
 ### DNS manage *.ships4whales.org
 
