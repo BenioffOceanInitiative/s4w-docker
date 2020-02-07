@@ -43,6 +43,9 @@ RUN cd /srv && rm -rf shiny-server && \
 # install api using plumber
 RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git ws-api 
 
+# install whalesafe4r
+RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/whalesafe4r.git whalesafe4r 
+
 EXPOSE 8888
 
 COPY symlinks.sh /srv/symlinks.sh 
