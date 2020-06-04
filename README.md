@@ -1,4 +1,4 @@
-# s4w-docker
+# ws-docker
 Docker server software setup for Ships for Whales
 
 Contents:
@@ -16,8 +16,8 @@ Uses: https://github.com/ekalinin/github-markdown-toc
    * [update 2019-12-17](#update-2019-12-17)
 * [Build containers](#build-containers)
    * [Test webserver](#test-webserver)
-   * [ships4whales](#ships4whales)
-   * [DNS manage *.ships4whales.org](#dns-manage-ships4whalesorg)
+   * [whalesafe.net](#whalesafenet)
+   * [DNS manage *.whalesafe.net](#dns-manage-whalesafenet)
    * [rstudio-shiny](#rstudio-shiny)
 * [Docker maintenance](#docker-maintenance)
    * [Push docker image](#push-docker-image)
@@ -31,19 +31,19 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 - Content management system:
   - [WordPress](https://wordpress.com)<br>
-    **ships4whales.org**
+    **whalesafe.net**
   - [MySQL](https://www.mysql.com/)<br>
-    ships4whales.org **:3306**
+    whalesafe.net **:3306**
 - Analytical apps:
   - [Shiny](https://shiny.rstudio.com)<br>
-    **shiny.** ships4whales.org
+    **shiny.** whalesafe.net
   - [RStudio](https://rstudio.com/products/rstudio/#rstudio-server)<br>
-    **rstudio.** ships4whales.org
+    **rstudio.** whalesafe.net
 - Spatial engine:
   - [GeoServer](http://geoserver.org)<br>
-    **gs.** ships4whales.org
+    **gs.** whalesafe.net
   - [PostGIS](https://postgis.net)<br>
-    ships4whales.org **:5432**
+    whalesafe.net **:5432**
 - Containerized using:
   - [docker](https://docs.docker.com/engine/installation/)
   - [docker-compose](https://docs.docker.com/compose/install/)
@@ -219,7 +219,7 @@ Commercial support is available at
 </html>
 ```
 
-### ships4whales
+### whalesafe.net
 
 References:
 
@@ -235,16 +235,16 @@ You will need access to the following secure files in Google Docs:
 
 First, you will create the environment `.env` file to specify password and host:
 
-- NOTE: Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). The [docker-compose.yml](https://github.com/BenioffOceanInitiative/s4w-docker/blob/master/docker-compose.yml) uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
+- NOTE: Set `PASSWORD`, substituting "CHANGEME" with password from [tech-aws notes | ship-strike - Google Docs](https://docs.google.com/document/d/1-iAlUOVzjw7Ejdlvmt2jVWdG6XhFqm13gWS3hZJ9mDc/edit#). The [docker-compose.yml](https://github.com/BenioffOceanInitiative/ws-docker/blob/master/docker-compose.yml) uses [variable substitution in Docker](https://docs.docker.com/compose/compose-file/#variable-substitution).
 
 ```bash
 # get latest docker-compose files
-git clone https://github.com/BenioffOceanInitiative/s4w-docker.git
-cd ~/s4w-docker
+git clone https://github.com/BenioffOceanInitiative/ws-docker.git
+cd ~/ws-docker
 
 # set environment variables
 echo "PASSWORD=CHANGEME" > .env
-echo "HOST=ships4whales.org" >> .env
+echo "HOST=whalesafe.net" >> .env
 cat .env
 
 # launch
@@ -258,7 +258,7 @@ git pull
 docker-compose up --build --force-recreate -d
 docker-compose up -d --no-deps --build rstudio-shiny
 docker-compose up -d --force-recreate --no-deps --build rstudio-shiny
-docker exec s4w-rstudio-shiny /srv/symlinks.sh
+docker exec ws-rstudio-shiny /srv/symlinks.sh
 
 # OR reload
 docker-compose restart
@@ -269,7 +269,7 @@ docker-compose stop
 
 #### plumber test
 
-http://api.ships4whales.org/echo?msg=hello
+http://api.whalesafe.net/echo?msg=hello
 
 ```bash
 curl "http://localhost:8888/echo?msg=hello"
@@ -284,13 +284,13 @@ ps | grep run_api
 kill 7
 sudo Rscript /srv/ws-api/run_api.R
 
-docker restart s4w-rstudio-shiny
+docker restart ws-rstudio-shiny
 
-### DNS manage *.ships4whales.org
+### DNS manage *.whalesafe.net
 
 - Using new public ip address: `34.220.29.172`
 
-- DNS matched to ships4whales.org via [Google Domains]( https://domains.google.com/m/registrar/ships4whales.org/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
+- DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
 
   - **wp**
   - **gs**
@@ -312,13 +312,13 @@ Haven't figured out how to RUN these commands after user admin is created in rst
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
 
-1. Go to shiny-apps/shiny_ships and run in rstudio to generate cache which otherwise times out when visiting site shiny.ships4whales.org/shiny_ships.
+1. Go to shiny-apps/shiny_ships and run in rstudio to generate cache which otherwise times out when visiting site shiny.whalesafe.net/shiny_ships.
 
 ## Docker maintenance
 
 ### Push docker image
 
-Since rstudio-shiny is a custom image `bdbest/rstudio-shiny:s4w`, I [docker-compose push](https://docs.docker.com/compose/reference/push/) to [bdbest/rstudio-shiny:s4w | Docker Hub](https://hub.docker.com/layers/bdbest/rstudio-shiny/s4w/images/sha256-134b85760fc6f383309e71490be99b8a50ab1db6b0bc864861f9341bf6517eca).
+Since rstudio-shiny is a custom image `bdbest/rstudio-shiny:ws`, I [docker-compose push](https://docs.docker.com/compose/reference/push/) to [bdbest/rstudio-shiny:ws | Docker Hub](https://hub.docker.com/layers/bdbest/rstudio-shiny/ws/images/sha256-134b85760fc6f383309e71490be99b8a50ab1db6b0bc864861f9341bf6517eca).
 
 ```bash
 # login to docker hub
@@ -330,12 +330,12 @@ docker-compose push
 
 ### Develop on local host
 
-Note setting of `HOST` to `local` vs `ships4whales.org`:
+Note setting of `HOST` to `local` vs `whalesafe.net`:
 
 ```bash
 # get latest docker-compose files
-git clone https://github.com/BenioffOceanInitiative/s4w-docker.git
-cd ~/s4w-docker
+git clone https://github.com/BenioffOceanInitiative/ws-docker.git
+cd ~/ws-docker
 
 # set environment variables
 echo "PASSWORD=CHANGEME" > .env
