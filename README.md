@@ -288,7 +288,7 @@ docker restart ws-rstudio-shiny
 
 ### DNS manage *.whalesafe.net
 
-- Using new public ip address: `34.220.29.172`
+- Using new public ip address on [Compute Engine - Benioff Ocean Initiative - Google Cloud Platform](https://console.cloud.google.com/compute/instances?project=benioff-ocean-initiative&authuser=1&instancessize=50&duration=PT1H): `34.67.27.49`
 
 - DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
 
@@ -303,12 +303,26 @@ Haven't figured out how to RUN these commands after user admin is created in rst
 
 1. Setup **permissions and shortcuts** for admin in rstudio.
     
-    After logging into rstudio.ships4hwales.org, to go to Terminal window and run:
+    After logging into rstudio.whalesafe.net, to go to Terminal window and run:
     
-    ```bash
-    sudo su -
-    
-    ```
+```bash
+mkdir github
+ln -s /srv/shiny-server ~/github/ws-apps
+ln -s /srv/ws-api       ~/github/ws-api
+ln -s /srv/whalesafe4r  ~/github/whalesafe4r 
+sudo chown -R admin /srv/*
+```
+
+
+EXPOSE 8888
+
+# TODO: run multiple services more elegantly
+# https://docs.docker.com/config/containers/multi-service_container/
+# CMD /init & Rscript /srv/ws-api/run_api.R
+CMD /init
+# THEN after logging into rstudio.ships4whales.org, Terminal:
+#   Rscript /srv/ws-api/run_api.R &
+
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
 
@@ -366,6 +380,9 @@ docker rm $(docker ps -aq)
 # remove all image
 docker rmi $(docker images -q)
 
+# remove all volumes
+docker rm $(docker ps -aq)
+
 # remove all stopped containers
 docker container prune
 ```
@@ -379,6 +396,92 @@ docker-compose logs -f
 
 docker inspect rstudio-shiny
 ```
+
+## setup ssl
+
+- [Hosting multiple SSL-enabled sites with Docker and Nginx | Serverwise](https://blog.ssdnodes.com/blog/host-multiple-ssl-websites-docker-nginx/)
+
+- https://letsencrypt.org/
+- [LetsEncrypt - Certbot - Ubuntufocal Nginx](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+
+
+```bash
+docker exec -it ws-proxy bash
+
+
+lsb_release -a
+# Debian 10
+
+apt-get install certbot python-certbot-nginx
+certbot --nginx
+
+```
+- bdbest@gmail.com
+
+```
+Which names would you like to activate HTTPS for?
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+1: api.whalesafe.net
+2: gs.whalesafe.net
+3: rstudio.whalesafe.net
+4: shiny.whalesafe.net
+5: wp.whalesafe.net
+
+
+Obtaining a new certificate
+Performing the following challenges:
+http-01 challenge for api.whalesafe.net
+http-01 challenge for gs.whalesafe.net
+http-01 challenge for rstudio.whalesafe.net
+http-01 challenge for shiny.whalesafe.net
+http-01 challenge for wp.whalesafe.net
+2020/06/09 21:45:17 [emerg] 3096#3096: "server_names_hash_bucket_size" directive is duplicate in /etc/nginx/conf.d/default.conf:20
+nginx: [emerg] "server_names_hash_bucket_size" directive is duplicate in /etc/nginx/conf.d/default.conf:20
+Cleaning up challenges
+2020/06/09 21:45:18 [notice] 3098#3098: signal process started
+nginx restart failed:
+b''
+b'/conf.d/default.conf:20\n'
+IMPORTANT NOTES:
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.
+```
+
+
+Test automatic renewal:
+
+```bash
+certbot renew --dry-run
+```
+
+[Connecting to instances using advanced methods](https://cloud.google.com/compute/docs/instances/connecting-advanced#provide-key)
+
+- [Setting up OS Login  |  Compute Engine Documentation  |  Google Cloud](https://cloud.google.com/compute/docs/instances/managing-instance-access#enable_oslogin)
+  - Step 3: Enabling or disabling OS Login
+  - Option 1: Set enable-oslogin in project-wide metadata so that it applies to all of the instances in your project.
+    - In the Google Cloud Console, go to the [Metadata](https://console.cloud.google.com/compute/metadata?_ga=2.224954329.2121865808.1591652416-431951595.1587653746) page.
+Go to the Metadata page
+    - Click Edit.
+    - Add a metadata entry where the key is enable-oslogin and the value is TRUE. 
+
+
+brew cask install google-cloud-sdk
+
+
+==> Caveats
+google-cloud-sdk is installed at /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk. Add your profile:
+
+  for bash users
+    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"
+    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
+
+
+In the Google Cloud Console, go to the Metadata page.
+
+
 
 ## TODO
 

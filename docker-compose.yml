@@ -17,14 +17,20 @@ services:
     environment:
       DEFAULT_HOST: wp.$HOST
       VIRTUAL_HOST_SPECIFIC_PORT: 'true'
+      VIRTUAL_PROTO: https
+      VIRTUAL_PORT: 443
+      DHPARAM_GENERATION: 'false'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
+      # --volume /etc/nginx/certs \
+      # --volume /etc/nginx/vhost.d \
+      # --volume /usr/share/nginx/html \
     restart: unless-stopped
     ports:
       - 80:80
       # TODO: add https
-      #- 443:443
+      - 443:443
     depends_on:
       - geoserver
       - wordpress
@@ -127,6 +133,7 @@ services:
       ROOT: 'true'
       USER: admin
       PASSWORD: $PASSWORD
+      ADD: shiny
     ports:
       - 8787:8787
       - 3838:3838
