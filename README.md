@@ -51,6 +51,10 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 ## Shell into server
 
+[Compute Engine - Benioff Ocean Initiative - Google Cloud Platform](https://console.cloud.google.com/compute/instances?project=benioff-ocean-initiative&authuser=1&instancessize=50)
+
+### OLD
+
 1. Connect to UCSB VPN via Secure Pulse
 1. SSH, eg for Ben:
     ```bash
@@ -297,7 +301,7 @@ docker restart ws-rstudio-shiny
   - **rstudio**
   - **shiny**
 
-### rstudio-shiny 
+## post-docker setup for rstudio-shiny 
 
 Haven't figured out how to RUN these commands after user admin is created in rstudio-shiny container.
 
@@ -306,23 +310,40 @@ Haven't figured out how to RUN these commands after user admin is created in rst
     After logging into rstudio.whalesafe.net, to go to Terminal window and run:
     
 ```bash
+cd /home/admin
 mkdir github
-ln -s /srv/shiny-server ~/github/ws-apps
-ln -s /srv/ws-api       ~/github/ws-api
-ln -s /srv/whalesafe4r  ~/github/whalesafe4r 
+cd github
+git clone https://github.com/BenioffOceanInitiative/ws-api.git
+git clone https://github.com/BenioffOceanInitiative/ws-apps.git
+ln -s /home//srv/shiny-server ~/github/ws-apps
+#ln -s /srv/ws-api       ~/github/ws-api
+#ln -s /srv/whalesafe4r  ~/github/whalesafe4r
 sudo chown -R admin /srv/*
 ```
+
+- Copy [ws_admin_pass.txt - Google Drive](https://drive.google.com/drive/u/1/folders/1Y7SY2HKbUqe7eGtp3LvucLzkH8fM3B3Q) into `/home/admin/ws_admin_pass.txt` on [rstudio.whalesafe.net](https://rstudio.whalesafe.net) so ws-api plumber.R works.
+
+- Copy [Benioff Ocean Initiative-454f666d1896.json - Google Drive](https://drive.google.com/drive/u/1/folders/1crBGnOPGiKdWbtOLQhzgdJKA1ztZBzTM) into `/home/admin/Benioff Ocean Initiative-454f666d1896.json`
+
+## setup cron job again
+
+- See comments at end of [bq2pg.py](https://github.com/BenioffOceanInitiative/ws-api/blob/master/bq2pg.py)
+
+
+
+
 
 
 EXPOSE 8888
 
+```
 # TODO: run multiple services more elegantly
 # https://docs.docker.com/config/containers/multi-service_container/
 # CMD /init & Rscript /srv/ws-api/run_api.R
 CMD /init
 # THEN after logging into rstudio.ships4whales.org, Terminal:
 #   Rscript /srv/ws-api/run_api.R &
-
+```
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
 
@@ -450,6 +471,19 @@ IMPORTANT NOTES:
    making regular backups of this folder is ideal.
 ```
 
+```bash
+tar cvfz /etc/letsencrypt.tar.gz /etc/letsencrypt/
+exit
+
+docker cp ws-proxy:/etc/letsencrypt.tar.gz .
+docker cp letsencrypt.tar.gz ws-rstudio-shiny:/home/admin/.
+
+docker exec -it ws-proxy bash
+
+/home/admin
+
+```
+
 
 Test automatic renewal:
 
@@ -481,7 +515,15 @@ google-cloud-sdk is installed at /usr/local/Caskroom/google-cloud-sdk/latest/goo
 
 In the Google Cloud Console, go to the Metadata page.
 
+## setup ssl, v2
 
+```bash
+docker stop $(docker ps -q)
+docker container rm ws-proxy ws-wordpress ws-mysql
+docker container rm ws-wordpress ws-mysql
+docker volume rm ws-docker_wordpress-html ws-docker_mysql-data
+docker-compose up --build -d
+```
 
 ## TODO
 
