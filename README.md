@@ -296,6 +296,7 @@ docker restart ws-rstudio-shiny
 
 - DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
 
+  - **www**
   - **wp**
   - **gs**
   - **rstudio**
