@@ -1,6 +1,11 @@
 version: '3.3'
 
 volumes:
+  nginx-conf:
+  nginx-certs:
+  nginx-vhost:
+  nginx-html:
+  nginx-dhparam:
   postgis-backups:
   geoserver-data:
   postgis-data:
@@ -14,6 +19,8 @@ services:
     container_name: ws-proxy
     image: jwilder/nginx-proxy
     env_file: .env
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true" # Label needed for Let's Encrypt companion container
     environment:
       DEFAULT_HOST: wp.$HOST
       VIRTUAL_HOST_SPECIFIC_PORT: 'true'
@@ -21,21 +28,43 @@ services:
       VIRTUAL_PORT: 443
       DHPARAM_GENERATION: 'false'
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro"
+      - "nginx-conf:/etc/nginx/conf.d"
+      - "nginx-certs:/etc/nginx/certs:ro"
+      - "nginx-dhparam:/etc/nginx/dhparam"
+      - "nginx-vhost:/etc/nginx/vhost.d"
+      - "nginx-html:/usr/share/nginx/html"
       # --volume /etc/nginx/certs \
       # --volume /etc/nginx/vhost.d \
       # --volume /usr/share/nginx/html \
     restart: unless-stopped
     ports:
       - 80:80
-      # TODO: add https
       - 443:443
-    depends_on:
-      - geoserver
-      - wordpress
-      - rstudio-shiny
-      #- plumber
+    #depends_on:
+    #  - geoserver
+    #  - wordpress
+    #  - rstudio-shiny
+    #  - plumber
+
+  # https://cloud.google.com/community/tutorials/nginx-reverse-proxy-docker
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    container_name: letsencrypt-nginx-proxy-companion
+    environment:
+      DEFAULT_EMAIL: 'ben@ecoquants.com' 
+    volumes:
+     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+     - "nginx-conf:/etc/nginx/conf.d"
+     - "nginx-certs:/etc/nginx/certs:rw"
+     - "nginx-dhparam:/etc/nginx/dhparam"
+     - "nginx-vhost:/etc/nginx/vhost.d"
+     - "nginx-html:/usr/share/nginx/html"
+    # Make sure we start nginx proxy container first
+    depends_on: 
+     - nginx-proxy
 
   postgis:
     container_name: ws-postgis
@@ -73,6 +102,7 @@ services:
     image: kartoza/geoserver:2.15.2
     environment:
       VIRTUAL_HOST: gs.$HOST
+      LETSENCRYPT_HOST: gs.$HOST
       USERNAME: admin
       PASS: $PASSWORD
       GEOSERVER_ADMIN_PASSWORD: $PASSWORD
@@ -88,6 +118,9 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
+    # Make sure we start letsencrypt-nginx-proxy-companion container first
+    depends_on: 
+     - letsencrypt-nginx-proxy-companion
 
   mysql:
     container_name: ws-mysql
@@ -115,10 +148,16 @@ services:
     restart: unless-stopped
     environment:
       VIRTUAL_HOST: wp.$HOST
+      # https://github.com/evertramos/docker-wordpress-letsencrypt
+      LETSENCRYPT_HOST: $HOST,www.$HOST,wp.$HOST
+      LETSENCRYPT_EMAIL: ben@ecoquants.com
       WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_USER: admin
       WORDPRESS_DB_PASSWORD: $PASSWORD
       WORDPRESS_DB_NAME: wordpress
+    # Make sure we start letsencrypt-nginx-proxy-companion container first
+    depends_on: 
+     - letsencrypt-nginx-proxy-companion
 
   rstudio-shiny:
     container_name: ws-rstudio-shiny
@@ -130,6 +169,7 @@ services:
     environment:
       # [Running virtual hosts on different ports of the same container · Issue #560 · jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy/issues/560)
       VIRTUAL_HOST: "rstudio.$HOST:8787,shiny.$HOST:3838,api.$HOST:8888"
+      LETSENCRYPT_HOST: "rstudio.$HOST,shiny.$HOST,api.$HOST"
       ROOT: 'true'
       USER: admin
       PASSWORD: $PASSWORD
@@ -138,6 +178,9 @@ services:
       - 8787:8787
       - 3838:3838
       - 8888:8888
+    # Make sure we start letsencrypt-nginx-proxy-companion container first
+    depends_on: 
+     - letsencrypt-nginx-proxy-companion
 
 #  plumber:
 #    container_name: ws-plumber
