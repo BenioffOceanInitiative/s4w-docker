@@ -294,7 +294,7 @@ docker restart ws-rstudio-shiny
 
 - Using new public ip address on [Compute Engine - Benioff Ocean Initiative - Google Cloud Platform](https://console.cloud.google.com/compute/instances?project=benioff-ocean-initiative&authuser=1&instancessize=50&duration=PT1H): `34.67.27.49`
 
-- DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.220.29.172** and Name:
+- DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.67.27.49** and Name:
 
   - **www**
   - **wp**
