@@ -53,17 +53,11 @@ RUN if [ ! -d "ws-apps" ] ; then \
 #RUN Rscript /share/github/ws-api/run_api.R &
 
 # bigquery to postgis script bq2pg.py
-RUN apt-get update && apt install python3-pip
+RUN apt-get update && apt-get install -y cron python3-pip
 RUN pip3 install pandas sqlalchemy psycopg2 google-cloud-bigquery tzlocal
 RUN ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
-RUN apt-get -y install cron
-RUN apt-get update; apt-get -y install cron
-# Copy hello-cron file to the cron.d directory
 COPY bq2pg_cron /etc/cron.d/bq2pg_cron
-# Give execution rights on the cron job
 RUN chmod 0644 /etc/cron.d/bq2pg_cron
-# Apply cron job
 RUN crontab /etc/cron.d/bq2pg_cron
-# Create the log file to be able to run tail
 RUN touch /share/bq2pg_log.txt
 RUN service cron start
