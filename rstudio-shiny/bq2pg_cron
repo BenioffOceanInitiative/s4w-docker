@@ -1,0 +1,1 @@
+0 8 * * * /usr/bin/python3 /share/github/ws-api/bq2pg.py >> /share/bq2pg_log.txt 2>&1

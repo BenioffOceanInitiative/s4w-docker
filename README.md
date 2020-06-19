@@ -16,8 +16,8 @@ Uses: https://github.com/ekalinin/github-markdown-toc
    * [update 2019-12-17](#update-2019-12-17)
 * [Build containers](#build-containers)
    * [Test webserver](#test-webserver)
-   * [whalesafe.net](#whalesafenet)
-   * [DNS manage *.whalesafe.net](#dns-manage-whalesafenet)
+   * [whalesafe.com](#whalesafecom)
+   * [DNS manage *.whalesafe.com](#dns-manage-whalesafecom)
    * [rstudio-shiny](#rstudio-shiny)
 * [Docker maintenance](#docker-maintenance)
    * [Push docker image](#push-docker-image)
@@ -31,19 +31,19 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 
 - Content management system:
   - [WordPress](https://wordpress.com)<br>
-    **whalesafe.net**
+    **whalesafe.com**
   - [MySQL](https://www.mysql.com/)<br>
-    whalesafe.net **:3306**
+    whalesafe.com **:3306**
 - Analytical apps:
   - [Shiny](https://shiny.rstudio.com)<br>
-    **shiny.** whalesafe.net
+    **shiny.** whalesafe.com
   - [RStudio](https://rstudio.com/products/rstudio/#rstudio-server)<br>
-    **rstudio.** whalesafe.net
+    **rstudio.** whalesafe.com
 - Spatial engine:
   - [GeoServer](http://geoserver.org)<br>
-    **gs.** whalesafe.net
+    **gs.** whalesafe.com
   - [PostGIS](https://postgis.net)<br>
-    whalesafe.net **:5432**
+    whalesafe.com **:5432**
 - Containerized using:
   - [docker](https://docs.docker.com/engine/installation/)
   - [docker-compose](https://docs.docker.com/compose/install/)
@@ -223,7 +223,7 @@ Commercial support is available at
 </html>
 ```
 
-### whalesafe.net
+### whalesafe.com
 
 References:
 
@@ -248,7 +248,7 @@ cd ~/ws-docker
 
 # set environment variables
 echo "PASSWORD=CHANGEME" > .env
-echo "HOST=whalesafe.net" >> .env
+echo "HOST=whalesafe.com" >> .env
 cat .env
 
 # launch
@@ -259,6 +259,7 @@ git pull; docker-compose up -d
 
 # OR build if Dockerfile updated in subfolder
 git pull
+docker-compose up --build -d
 docker-compose up --build --force-recreate -d
 docker-compose up -d --no-deps --build rstudio-shiny
 docker-compose up -d --force-recreate --no-deps --build rstudio-shiny
@@ -273,7 +274,7 @@ docker-compose stop
 
 #### plumber test
 
-http://api.whalesafe.net/echo?msg=hello
+http://api.whalesafe.com/echo?msg=hello
 
 ```bash
 curl "http://localhost:8888/echo?msg=hello"
@@ -290,11 +291,11 @@ sudo Rscript /srv/ws-api/run_api.R
 
 docker restart ws-rstudio-shiny
 
-### DNS manage *.whalesafe.net
+### DNS manage *.whalesafe.com
 
 - Using new public ip address on [Compute Engine - Benioff Ocean Initiative - Google Cloud Platform](https://console.cloud.google.com/compute/instances?project=benioff-ocean-initiative&authuser=1&instancessize=50&duration=PT1H): `34.67.27.49`
 
-- DNS matched to whalesafe.net via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.net/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.67.27.49** and Name:
+- DNS matched to whalesafe.com via [Google Domains]( https://domains.google.com/m/registrar/whalesafe.com/dns), plus the following subdomains added under **Custom resource records** with Type:**A**, Data:**34.67.27.49** and Name:
 
   - **www**
   - **wp**
@@ -308,7 +309,7 @@ Haven't figured out how to RUN these commands after user admin is created in rst
 
 1. Setup **permissions and shortcuts** for admin in rstudio.
     
-    After logging into rstudio.whalesafe.net, to go to Terminal window and run:
+    After logging into rstudio.whalesafe.com, to go to Terminal window and run:
     
 ```bash
 cd /home/admin
@@ -322,7 +323,7 @@ ln -s /home//srv/shiny-server ~/github/ws-apps
 sudo chown -R admin /srv/*
 ```
 
-- Copy [ws_admin_pass.txt - Google Drive](https://drive.google.com/drive/u/1/folders/1Y7SY2HKbUqe7eGtp3LvucLzkH8fM3B3Q) into `/home/admin/ws_admin_pass.txt` on [rstudio.whalesafe.net](https://rstudio.whalesafe.net) so ws-api plumber.R works.
+- Copy [ws_admin_pass.txt - Google Drive](https://drive.google.com/drive/u/1/folders/1Y7SY2HKbUqe7eGtp3LvucLzkH8fM3B3Q) into `/home/admin/ws_admin_pass.txt` on [rstudio.whalesafe.com](https://rstudio.whalesafe.com) so ws-api plumber.R works.
 
 - Copy [Benioff Ocean Initiative-454f666d1896.json - Google Drive](https://drive.google.com/drive/u/1/folders/1crBGnOPGiKdWbtOLQhzgdJKA1ztZBzTM) into `/home/admin/Benioff Ocean Initiative-454f666d1896.json`
 
@@ -348,7 +349,7 @@ CMD /init
   
 1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
 
-1. Go to shiny-apps/shiny_ships and run in rstudio to generate cache which otherwise times out when visiting site shiny.whalesafe.net/shiny_ships.
+1. Go to shiny-apps/shiny_ships and run in rstudio to generate cache which otherwise times out when visiting site shiny.whalesafe.com/shiny_ships.
 
 ## Docker maintenance
 
@@ -366,7 +367,7 @@ docker-compose push
 
 ### Develop on local host
 
-Note setting of `HOST` to `local` vs `whalesafe.net`:
+Note setting of `HOST` to `local` vs `whalesafe.com`:
 
 ```bash
 # get latest docker-compose files
@@ -421,103 +422,6 @@ docker inspect rstudio-shiny
 
 ## setup ssl
 
-- [Hosting multiple SSL-enabled sites with Docker and Nginx | Serverwise](https://blog.ssdnodes.com/blog/host-multiple-ssl-websites-docker-nginx/)
-
-- https://letsencrypt.org/
-- [LetsEncrypt - Certbot - Ubuntufocal Nginx](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
-
-
-```bash
-docker exec -it ws-proxy bash
-
-
-lsb_release -a
-# Debian 10
-
-apt-get install certbot python-certbot-nginx
-certbot --nginx
-
-```
-- bdbest@gmail.com
-
-```
-Which names would you like to activate HTTPS for?
-- - - - - - - - - - - - - - - - - - - - - - - - - 
-1: api.whalesafe.net
-2: gs.whalesafe.net
-3: rstudio.whalesafe.net
-4: shiny.whalesafe.net
-5: wp.whalesafe.net
-
-
-Obtaining a new certificate
-Performing the following challenges:
-http-01 challenge for api.whalesafe.net
-http-01 challenge for gs.whalesafe.net
-http-01 challenge for rstudio.whalesafe.net
-http-01 challenge for shiny.whalesafe.net
-http-01 challenge for wp.whalesafe.net
-2020/06/09 21:45:17 [emerg] 3096#3096: "server_names_hash_bucket_size" directive is duplicate in /etc/nginx/conf.d/default.conf:20
-nginx: [emerg] "server_names_hash_bucket_size" directive is duplicate in /etc/nginx/conf.d/default.conf:20
-Cleaning up challenges
-2020/06/09 21:45:18 [notice] 3098#3098: signal process started
-nginx restart failed:
-b''
-b'/conf.d/default.conf:20\n'
-IMPORTANT NOTES:
- - Your account credentials have been saved in your Certbot
-   configuration directory at /etc/letsencrypt. You should make a
-   secure backup of this folder now. This configuration directory will
-   also contain certificates and private keys obtained by Certbot so
-   making regular backups of this folder is ideal.
-```
-
-```bash
-tar cvfz /etc/letsencrypt.tar.gz /etc/letsencrypt/
-exit
-
-docker cp ws-proxy:/etc/letsencrypt.tar.gz .
-docker cp letsencrypt.tar.gz ws-rstudio-shiny:/home/admin/.
-
-docker exec -it ws-proxy bash
-
-/home/admin
-
-```
-
-
-Test automatic renewal:
-
-```bash
-certbot renew --dry-run
-```
-
-[Connecting to instances using advanced methods](https://cloud.google.com/compute/docs/instances/connecting-advanced#provide-key)
-
-- [Setting up OS Login  |  Compute Engine Documentation  |  Google Cloud](https://cloud.google.com/compute/docs/instances/managing-instance-access#enable_oslogin)
-  - Step 3: Enabling or disabling OS Login
-  - Option 1: Set enable-oslogin in project-wide metadata so that it applies to all of the instances in your project.
-    - In the Google Cloud Console, go to the [Metadata](https://console.cloud.google.com/compute/metadata?_ga=2.224954329.2121865808.1591652416-431951595.1587653746) page.
-Go to the Metadata page
-    - Click Edit.
-    - Add a metadata entry where the key is enable-oslogin and the value is TRUE. 
-
-
-brew cask install google-cloud-sdk
-
-
-==> Caveats
-google-cloud-sdk is installed at /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk. Add your profile:
-
-  for bash users
-    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"
-    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
-
-
-In the Google Cloud Console, go to the Metadata page.
-
-## setup ssl, v2
-
 ```bash
 docker stop $(docker ps -q)
 docker container rm ws-proxy ws-wordpress ws-mysql
@@ -525,6 +429,29 @@ docker container rm ws-wordpress ws-mysql
 docker volume rm ws-docker_wordpress-html ws-docker_mysql-data
 docker-compose up --build -d
 ```
+
+## migrate whalesafe.net to whalesafe.com
+
+docker rm letsencrypt-nginx-proxy-companion ws-proxy
+docker volume rm ws-docker_nginx-certs ws-docker_nginx-conf ws-docker_nginx-dhparam ws-docker_nginx-html ws-docker_nginx-vhost 
+docker rm ws-wordpress ws-mysql ws-geoserver
+docker volume rm ws-docker_wordpress-html ws-docker_mysql-data ws-docker_geoserver-data 
+
+DRIVER              VOLUME NAME
+local               3f5694dd0ce812c5c5f7915723bf5a5dfbc203e316724f47b9e921f8d06d7e51
+local               33b23e53505a8c3f6c73742024d586472bf0f556b9ef89b702201d2916630d9a
+local               bfa0c9d7e037d4630d11b814997d65e0efe499ecbe24f88c946bbba9d2a22700
+local               ws-docker_geoserver-data
+local               ws-docker_mysql-data
+local               ws-docker_nginx-certs
+local               ws-docker_nginx-conf
+local               ws-docker_nginx-dhparam
+local               ws-docker_nginx-html
+local               ws-docker_nginx-vhost
+local               ws-docker_postgis-backups
+local               ws-docker_postgis-data
+local               ws-docker_shiny-apps
+local               ws-docker_wordpress-html
 
 ## TODO
 

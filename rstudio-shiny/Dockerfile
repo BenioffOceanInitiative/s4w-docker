@@ -1,29 +1,32 @@
-FROM rocker/geospatial:latest
+# `etc/cont-init.d/add: No such file or directory` with 4.0.0
+#   https://github.com/rocker-org/rocker-versioned/issues/219#issuecomment-633680843
+FROM rocker/geospatial:3.6.3
 MAINTAINER "Ben Best" ben@ecoquants.com
 
 # install extra packages 
 RUN install2.r --error \
   # for shiny:
-  Rcpp \
-  httpuv \
-  shiny \
-  # for app: https://github.com/BenioffOceanInitiative/ships4whales-app/blob/master/shiny_ships/app.R
   dbplyr \
+  DBI \
+  DT \
   fs \
   glue \
   gstat \
   here \
+  httpuv \
   leaflet \
   plumber \
-  units \
+  Rcpp \
   RColorBrewer \
-  RPostgreSQL \
   RPostgres \
-  shinydashboard
+  shiny \
+  shinydashboard \
+  units
   
   # already included: https://tidyverse.tidyverse.org
   #   dplyr
   #   lubridate
+  #   stringr
   # already included: https://github.com/rocker-org/geospatial
   #   maptools
   #   raster
@@ -34,29 +37,33 @@ RUN install2.r --error \
   #   tmap
   
 # add Shiny, per https://github.com/rocker-org/rocker/issues/235#issuecomment-299036810
-# RUN export ADD=shiny && bash /etc/cont-init.d/add
-# BB error 2020-06-12: bash: /etc/cont-init.d/add: No such file or directory
-#   so inserting "ADD: shiny" into docker-compose.yml
-# EXPOSE 8888
+RUN export ADD=shiny && bash /etc/cont-init.d/add
 
-# install Shiny apps
-#RUN cd /srv && rm -rf shiny-server && \
-#    git clone https://github.com/BenioffOceanInitiative/ws-apps.git shiny-server
-    
-# install api using plumber
-#RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/ws-api.git \
-#  ws-api 
+# github repos
+RUN mkdir -p /share/github
+WORKDIR /share/github
 
-# install whalesafe4r
-#RUN cd /srv && git clone https://github.com/BenioffOceanInitiative/whalesafe4r.git \
-#  whalesafe4r 
+RUN if [ ! -d "ws-api" ] ; then \
+  git clone https://github.com/BenioffOceanInitiative/ws-api.git ; fi
+RUN if [ ! -d "ws-apps" ] ; then \
+  git clone https://github.com/BenioffOceanInitiative/ws-apps.git ; \
+  ln -s /share/github/ws-apps/api-test /srv/shiny-server/api-test ; fi
 
-#COPY symlinks.sh /srv/symlinks.sh 
-#RUN chmod +x /srv/symlinks.sh 
+# run api
+#RUN Rscript /share/github/ws-api/run_api.R &
 
-# TODO: run multiple services more elegantly
-# https://docs.docker.com/config/containers/multi-service_container/
-# CMD /init & Rscript /srv/ws-api/run_api.R
-# CMD /init
-# THEN after logging into rstudio.ships4whales.org, Terminal:
-#   Rscript /srv/ws-api/run_api.R &
+# bigquery to postgis script bq2pg.py
+RUN apt-get update && RUN apt install python3-pip
+RUN pip3 install pandas sqlalchemy psycopg2 google-cloud-bigquery tzlocal
+RUN ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+RUN apt-get -y install cron
+RUN apt-get update; apt-get -y install cron
+# Copy hello-cron file to the cron.d directory
+COPY bq2pg_cron /etc/cron.d/bq2pg_cron
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/bq2pg_cron
+# Apply cron job
+RUN crontab /etc/cron.d/bq2pg_cron
+# Create the log file to be able to run tail
+RUN touch /share/bq2pg_log.txt
+RUN service cron start
