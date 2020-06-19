@@ -53,7 +53,7 @@ RUN if [ ! -d "ws-apps" ] ; then \
 #RUN Rscript /share/github/ws-api/run_api.R &
 
 # bigquery to postgis script bq2pg.py
-RUN apt-get update && RUN apt install python3-pip
+RUN apt-get update && apt install python3-pip
 RUN pip3 install pandas sqlalchemy psycopg2 google-cloud-bigquery tzlocal
 RUN ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 RUN apt-get -y install cron
