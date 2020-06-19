@@ -305,51 +305,35 @@ docker restart ws-rstudio-shiny
 
 ## post-docker setup for rstudio-shiny 
 
-Haven't figured out how to RUN these commands after user admin is created in rstudio-shiny container.
-
-1. Setup **permissions and shortcuts** for admin in rstudio.
+Setup **permissions and shortcuts** for admin in rstudio.
     
-    After logging into rstudio.whalesafe.com, to go to Terminal window and run:
+After logging into [rstudio.whalesafe.com](https://rstudio.whalesafe.com), go to Terminal window and run:
     
 ```bash
-cd /home/admin
-mkdir github
-cd github
-git clone https://github.com/BenioffOceanInitiative/ws-api.git
-git clone https://github.com/BenioffOceanInitiative/ws-apps.git
-ln -s /home//srv/shiny-server ~/github/ws-apps
-#ln -s /srv/ws-api       ~/github/ws-api
-#ln -s /srv/whalesafe4r  ~/github/whalesafe4r
-sudo chown -R admin /srv/*
+ln -s /share/github /home/admin/github
+sudo chown -R admin /share
 ```
 
-- Copy [ws_admin_pass.txt - Google Drive](https://drive.google.com/drive/u/1/folders/1Y7SY2HKbUqe7eGtp3LvucLzkH8fM3B3Q) into `/home/admin/ws_admin_pass.txt` on [rstudio.whalesafe.com](https://rstudio.whalesafe.com) so ws-api plumber.R works.
+Upload files into /home/admin:
+
+- Upload [ws_admin_pass.txt - Google Drive](https://drive.google.com/drive/u/1/folders/1Y7SY2HKbUqe7eGtp3LvucLzkH8fM3B3Q) into `/home/admin/ws_admin_pass.txt` on [rstudio.whalesafe.com](https://rstudio.whalesafe.com) so ws-api plumber.R works.
 
 - Copy [Benioff Ocean Initiative-454f666d1896.json - Google Drive](https://drive.google.com/drive/u/1/folders/1crBGnOPGiKdWbtOLQhzgdJKA1ztZBzTM) into `/home/admin/Benioff Ocean Initiative-454f666d1896.json`
 
-## setup cron job again
+Turn on [api.whalesafe.com](https://api.whalesafe.com):
 
-- See comments at end of [bq2pg.py](https://github.com/BenioffOceanInitiative/ws-api/blob/master/bq2pg.py)
-
-
-
-
-
-
-EXPOSE 8888
-
+```bash
+sudo su - root
+Rscript /srv/ws-api/run_api.R &
+exit
 ```
-# TODO: run multiple services more elegantly
-# https://docs.docker.com/config/containers/multi-service_container/
-# CMD /init & Rscript /srv/ws-api/run_api.R
-CMD /init
-# THEN after logging into rstudio.ships4whales.org, Terminal:
-#   Rscript /srv/ws-api/run_api.R &
-```
-  
-1. Copy [**amazon_rds.yml**](https://drive.google.com/open?id=1eddyoeFO5bslUakzireH1NFh8UsGBfEY) into `/srv/shiny-server/.rds_amazon.yml` for connecting to the Amazon PostgreSQL/PostGIS relational database service (RDS).
 
-1. Go to shiny-apps/shiny_ships and run in rstudio to generate cache which otherwise times out when visiting site shiny.whalesafe.com/shiny_ships.
+Try out services:
+
+- [api](https://api.whalesafe.com/)
+- [shiny/api-test](https://shiny.whalesafe.com/api-test)
+- [rstudio](https://rstudio.whalesafe.com/)
+- [wordpress](https://wordpress.whalesafe.com/) & [login](https://whalesafe.com/wp-login.php)
 
 ## Docker maintenance
 
