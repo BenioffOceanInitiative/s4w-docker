@@ -10,9 +10,9 @@ volumes:
   postgis-backups:
   geoserver-data:
   postgis-data:
-  # mysql-data:
+  mysql-data:
   shiny-apps:
-  # wordpress-html:
+  wordpress-html:
 
 services:
 
@@ -126,44 +126,44 @@ services:
     depends_on: 
      - letsencrypt-nginx-proxy-companion
 
-  # mysql:
-  #   container_name: ws-mysql
-  #   image: mysql:8.0.18
-  #   volumes:
-  #     - mysql-data:/var/lib/mysql
-  #     - share:/share
-  #   restart: unless-stopped
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: $PASSWORD
-  #     MYSQL_DATABASE: wordpress
-  #     MYSQL_USER: admin
-  #     MYSQL_PASSWORD: $PASSWORD
-  #   ports:
-  #     - 3306:3306
-  # 
-  # wordpress:
-  #   container_name: ws-wordpress
-  #   depends_on:
-  #     - mysql
-  #     - share:/share
-  #   image: wordpress:php7.4-apache
-  #   ports:
-  #     - 8000:80
-  #   volumes:
-  #     - wordpress-html:/var/www/html      
-  #   restart: unless-stopped
-  #   environment:
-  #     VIRTUAL_HOST: wp.$HOST
-  #     # https://github.com/evertramos/docker-wordpress-letsencrypt
-  #     LETSENCRYPT_HOST: $HOST,www.$HOST,wp.$HOST
-  #     LETSENCRYPT_EMAIL: ben@ecoquants.com
-  #     WORDPRESS_DB_HOST: mysql:3306
-  #     WORDPRESS_DB_USER: admin
-  #     WORDPRESS_DB_PASSWORD: $PASSWORD
-  #     WORDPRESS_DB_NAME: wordpress
-  #   # Make sure we start letsencrypt-nginx-proxy-companion container first
-  #   depends_on: 
-  #    - letsencrypt-nginx-proxy-companion
+  mysql:
+    container_name: ws-mysql
+    image: mysql:8.0.18
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - share:/share
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: $PASSWORD
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: $PASSWORD
+    ports:
+      - 3306:3306
+
+  wordpress:
+    container_name: ws-wordpress
+    depends_on:
+      - mysql
+      - share:/share
+    image: wordpress:php7.4-apache
+    ports:
+      - 8000:80
+    volumes:
+      - wordpress-html:/var/www/html      
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: wp.$HOST
+      # https://github.com/evertramos/docker-wordpress-letsencrypt
+      LETSENCRYPT_HOST: $HOST,www.$HOST,wp.$HOST
+      LETSENCRYPT_EMAIL: ben@ecoquants.com
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: $PASSWORD
+      WORDPRESS_DB_NAME: wordpress
+    # Make sure we start letsencrypt-nginx-proxy-companion container first
+    depends_on: 
+     - letsencrypt-nginx-proxy-companion
 
   rstudio-shiny:
     container_name: ws-rstudio-shiny
