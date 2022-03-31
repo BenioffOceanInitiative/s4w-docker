@@ -6,7 +6,7 @@ FROM golang:1.15.5-alpine3.12
 ARG VERSION="latest-alpine-3.12"
 
 RUN mkdir /app
-ADD ./src-2022-03-31 /app/
+ADD . /app/
 WORKDIR /app
 RUN go build -v -ldflags "-s -w -X main.programVersion=${VERSION}"
 
