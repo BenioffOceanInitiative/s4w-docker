@@ -189,6 +189,24 @@ services:
     depends_on: 
      - letsencrypt-nginx-proxy-companion
 
+  pg_tileserv:
+    environment:
+      VIRTUAL_HOST: tile.$HOST
+      LETSENCRYPT_HOST: tile.$HOST
+      DATABASE_URL: postgres://admin:$PASSWORD@ws-postgis:5432/gis
+    image: pramsey/pg_tileserv:latest
+    build:
+      context: ./pg_tileserv
+      dockerfile: Dockerfile.alpine
+      args:
+        VERSION: latest
+    container_name: pg_tileserv
+    depends_on:
+      - postgis
+    ports:
+      - 7800:7800
+
+
 #  plumber:
 #    container_name: ws-plumber
 #    build: ./plumber
