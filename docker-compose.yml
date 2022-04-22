@@ -62,7 +62,7 @@ services:
       DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
       MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
-      CacheTTL = 600         # matching with tilecache's default_ttl below
+      CacheTTL: 600          # matching with tilecache's default_ttl below
     image: pramsey/pg_tileserv:latest
     build:
       context: ./pg_tileserv
