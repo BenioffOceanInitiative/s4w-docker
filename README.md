@@ -128,6 +128,41 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
+### Permissions
+
+In Terminal as admin logged into [rstudio.whalesafe.com](https://rstudio.whalesafe.com).
+
+```bash
+# setup (once) staff to be shared by admin, and default permissions 775
+sudo su 
+gpasswd -a admin -g staff
+usermod -aG staff admin
+usermod -g staff admin # set default group to staff for user admin
+echo 'umask 002' >> /etc/profile
+
+# override RStudio's default group read only with group read & write
+printf "Sys.umask('2')\n" >> /usr/local/lib/R/etc/Rprofile.site
+# vs quick fix in Terminal of rstudio.marineenergy.app: sudo chmod -R g+w *
+
+# Add shiny to staff so has permission to install libraries into `/usr/local/lib/R/site-library` and write files
+usermod -aG staff shiny
+
+# set primary group to staff
+usermod -g staff shiny
+#confirm primary group set to staff
+id shiny
+# uid=998(shiny) gid=50(staff) groups=50(staff)
+```
+
+Avoid librarian::shelf() `Error in lib_paths(lib, make_path = TRUE, ask = ask): The paths are not writeable.` by updating permisions:
+
+```bash
+sudo chgrp -R staff /usr/local/lib/R/library
+sudo chmod g+w /usr/local/lib/R/library
+```
+
+
+
 ### OLD: Move docker storage
 
 Because ran out of room in root drive `/` when subsequently install images:
@@ -285,11 +320,14 @@ curl "http://localhost:8888/echo?msg=hello"
 ```
 #### restart plumber api
 
+```bash
 ps | grep run_api
 kill 7
 sudo Rscript /srv/ws-api/run_api.R
 
 docker restart ws-rstudio-shiny
+```
+
 
 ### DNS manage *.whalesafe.com
 
