@@ -227,7 +227,7 @@ services:
     container_name: tilecache
     image: eeacms/varnish
     ports:
-      - "80:6081"
+      - "6081:6081"
     environment:
       # VIRTUAL_HOST: tile.$HOST
       # LETSENCRYPT_HOST: tile.$HOST
