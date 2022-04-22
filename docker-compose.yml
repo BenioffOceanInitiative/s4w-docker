@@ -209,7 +209,7 @@ services:
     environment:
       # VIRTUAL_HOST: tile_pg.$HOST
       # LETSENCRYPT_HOST: tile_pg.$HOST
-      DATABASE_URL: postgres://admin:$PASSWORD@ws-postgis:5432/gis
+      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
       MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
     image: pramsey/pg_tileserv:latest
