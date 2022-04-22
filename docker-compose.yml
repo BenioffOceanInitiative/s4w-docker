@@ -22,22 +22,6 @@ services:
       - caddy_config:/config
       - /share:/share   
 
-  postgis:
-    container_name: postgis
-    image: kartoza/postgis:11.0-2.5
-    environment:
-      POSTGRES_DBNAME: gis
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: $PASSWORD
-    volumes:
-      - postgis-data:/var/lib/postgresql
-      - share:/share
-    restart: unless-stopped
-    healthcheck:
-      test: 'exit 0'
-    ports:
-      - 5432:5432
-
   rstudio:
     container_name: rstudio
     build: ./rstudio-shiny
@@ -55,6 +39,22 @@ services:
       - 8787:8787 # rstudio.
       - 3838:3838 # shiny.
       - 8888:8888 # api.
+
+  postgis:
+    container_name: postgis
+    image: kartoza/postgis:11.0-2.5
+    environment:
+      POSTGRES_DBNAME: gis
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: $PASSWORD
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      - share:/share
+    restart: unless-stopped
+    healthcheck:
+      test: 'exit 0'
+    ports:
+      - 5432:5432
 
   tileserv:
     container_name: tileserv
@@ -74,16 +74,6 @@ services:
     ports:
       - 7800:7800
       
-  featureserv:
-    container_name: featureserv
-    environment:
-      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
-    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
-    depends_on:
-      - postgis
-    ports:
-      - 9000:9000
-
   tilecache:
     container_name: tilecache
     image: eeacms/varnish
@@ -96,3 +86,16 @@ services:
       PARAM_VALUE: "-p default_ttl=600" # 600 sec = 10 min * 60 sec/min
     depends_on:
       - tileserv
+      
+  featureserv:
+    container_name: featureserv
+    environment:
+      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+      # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
+      LimitMax: 1000000
+    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
+    depends_on:
+      - postgis
+    ports:
+      - 9000:9000
+
