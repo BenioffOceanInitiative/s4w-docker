@@ -191,9 +191,11 @@ services:
 
   pg_tileserv:
     environment:
-      VIRTUAL_HOST: tile.$HOST
-      LETSENCRYPT_HOST: tile.$HOST
+      VIRTUAL_HOST: tile_pg.$HOST
+      LETSENCRYPT_HOST: tile_pg.$HOST
       DATABASE_URL: postgres://admin:$PASSWORD@ws-postgis:5432/gis
+      # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
+      MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
     image: pramsey/pg_tileserv:latest
     build:
       context: ./pg_tileserv
@@ -206,6 +208,19 @@ services:
     ports:
       - 7800:7800
 
+  pg_tilecache:
+    image: eeacms/varnish
+    ports:
+      - "80:6081"
+    environment:
+      VIRTUAL_HOST: tile.$HOST
+      LETSENCRYPT_HOST: tile.$HOST
+      BACKENDS: "pg_tileserv:7800"
+      DNS_ENABLED: "false"
+      COOKIES: "true"
+      PARAM_VALUE: "-p default_ttl=600" # 600 sec = 10 min * 60 sec/min
+    depends_on:
+      - pg_tileserv
 
 #  plumber:
 #    container_name: ws-plumber
