@@ -2,72 +2,12 @@ version: '3.3'
 
 volumes:
   share:
-  # nginx-conf:
-  # nginx-certs:
-  # nginx-vhost:
-  # nginx-html:
-  # nginx-dhparam:
   caddy_data:
   caddy_config:
-  # postgis-backups:
-  # geoserver-data:
   postgis-data:
-  # mysql-data:
   shiny-apps:
-  # wordpress-html:
 
 services:
-
-  # nginx-proxy:
-  #   container_name: proxy
-  #   image: jwilder/nginx-proxy
-  #   env_file: .env
-  #   labels:
-  #     - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true" # Label needed for Let's Encrypt companion container
-  #   environment:
-  #     DEFAULT_HOST: wp.$HOST
-  #     VIRTUAL_HOST_SPECIFIC_PORT: 'true'
-  #     VIRTUAL_PROTO: https
-  #     VIRTUAL_PORT: 443
-  #     DHPARAM_GENERATION: 'false'
-  #   volumes:
-  #     - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  #     - "./nginx-proxy/nginx.tmpl:/app/nginx.tmpl:ro"
-  #     - "nginx-conf:/etc/nginx/conf.d"
-  #     - "nginx-certs:/etc/nginx/certs:ro"
-  #     - "nginx-dhparam:/etc/nginx/dhparam"
-  #     - "nginx-vhost:/etc/nginx/vhost.d"
-  #     - "nginx-html:/usr/share/nginx/html"
-  #     # --volume /etc/nginx/certs \
-  #     # --volume /etc/nginx/vhost.d \
-  #     # --volume /usr/share/nginx/html \
-  #   restart: unless-stopped
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-    #depends_on:
-    #  - geoserver
-    #  - wordpress
-    #  - rstudio-shiny
-    #  - plumber
-
-  # https://cloud.google.com/community/tutorials/nginx-reverse-proxy-docker
-  # proxy:
-  #   container_name: proxy
-  #   image: jrcs/letsencrypt-nginx-proxy-companion
-  #   restart: always
-  #   environment:
-  #     DEFAULT_EMAIL: 'ben@ecoquants.com' 
-  #   volumes:
-  #    - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  #    - "nginx-conf:/etc/nginx/conf.d"
-  #    - "nginx-certs:/etc/nginx/certs:rw"
-  #    - "nginx-dhparam:/etc/nginx/dhparam"
-  #    - "nginx-vhost:/etc/nginx/vhost.d"
-  #    - "nginx-html:/usr/share/nginx/html"
-  #   # Make sure we start nginx proxy container first
-  #   depends_on: 
-  #    - proxy
 
   caddy:
     container_name: caddy
@@ -98,88 +38,6 @@ services:
     ports:
       - 5432:5432
 
-  # postgis-backup:
-  #   container_name: ws-postgis-backup
-  #   image: kartoza/pg-backup:11.0
-  #   volumes:
-  #     - postgis-backups:/backups
-  #     - share:/share
-  #   environment:
-  #     POSTGRES_HOST: db
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_DBNAME: gis
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASS: $PASSWORD
-  #     DUMPPREFIX: PG_gis
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - postgis
-
-  # geoserver:
-  #   container_name: ws-geoserver
-  #   image: kartoza/geoserver:2.15.2
-  #   environment:
-  #     VIRTUAL_HOST: gs.$HOST
-  #     LETSENCRYPT_HOST: gs.$HOST
-  #     USERNAME: admin
-  #     PASS: $PASSWORD
-  #     GEOSERVER_ADMIN_PASSWORD: $PASSWORD
-  #   volumes:
-  #     - geoserver-data:/opt/geoserver/data_dir
-  #     - share:/share
-  #   ports:
-  #     - 8080:8080
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - postgis
-  #   healthcheck:
-  #     test: curl --fail -s http://localhost:8080/ || exit 1
-  #     interval: 1m30s
-  #     timeout: 10s
-  #     retries: 3
-  #   # Make sure we start letsencrypt-nginx-proxy-companion container first
-  #   depends_on: 
-  #    - letsencrypt-nginx-proxy-companion
-
-  # mysql:
-  #   container_name: ws-mysql
-  #   image: mysql:8.0.18
-  #   volumes:
-  #     - mysql-data:/var/lib/mysql
-  #     - share:/share
-  #   restart: unless-stopped
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: $PASSWORD
-  #     MYSQL_DATABASE: wordpress
-  #     MYSQL_USER: admin
-  #     MYSQL_PASSWORD: $PASSWORD
-  #   ports:
-  #     - 3306:3306
-
-  # wordpress:
-  #   container_name: ws-wordpress
-  #   depends_on:
-  #     - mysql
-  #     - share:/share
-  #   image: wordpress:php7.4-apache
-  #   ports:
-  #     - 8000:80
-  #   volumes:
-  #     - wordpress-html:/var/www/html      
-  #   restart: unless-stopped
-  #   environment:
-  #     VIRTUAL_HOST: wp.$HOST
-  #     # https://github.com/evertramos/docker-wordpress-letsencrypt
-  #     LETSENCRYPT_HOST: $HOST,www.$HOST,wp.$HOST
-  #     LETSENCRYPT_EMAIL: ben@ecoquants.com
-  #     WORDPRESS_DB_HOST: mysql:3306
-  #     WORDPRESS_DB_USER: admin
-  #     WORDPRESS_DB_PASSWORD: $PASSWORD
-  #     WORDPRESS_DB_NAME: wordpress
-  #   # Make sure we start letsencrypt-nginx-proxy-companion container first
-  #   depends_on: 
-  #    - letsencrypt-nginx-proxy-companion
-
   rstudio:
     container_name: rstudio
     build: ./rstudio-shiny
@@ -189,26 +47,18 @@ services:
       - share:/share
     restart: unless-stopped
     environment:
-      # [Running virtual hosts on different ports of the same container · Issue #560 · jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy/issues/560)
-      # VIRTUAL_HOST: "rstudio.$HOST:8787,shiny.$HOST:3838,api.$HOST:8888"
-      # LETSENCRYPT_HOST: "rstudio.$HOST,shiny.$HOST,api.$HOST"
       ROOT: 'true'
       USER: admin
       PASSWORD: $PASSWORD
       ADD: shiny
     ports:
-      - 8787:8787
-      - 3838:3838
-      - 8888:8888
-    # Make sure we start letsencrypt-nginx-proxy-companion container first
-    # depends_on: 
-    #  - letsencrypt-nginx-proxy-companion
+      - 8787:8787 # rstudio.
+      - 3838:3838 # shiny.
+      - 8888:8888 # api.
 
   tileserv:
     container_name: tileserv
     environment:
-      # VIRTUAL_HOST: tile_pg.$HOST
-      # LETSENCRYPT_HOST: tile_pg.$HOST
       DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
       MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
@@ -227,24 +77,11 @@ services:
     container_name: tilecache
     image: eeacms/varnish
     ports:
-      - "6081:6081"
+      - 6081:6081 # tile.
     environment:
-      # VIRTUAL_HOST: tile.$HOST
-      # LETSENCRYPT_HOST: tile.$HOST
       BACKENDS: "tileserv:7800"
       DNS_ENABLED: "false"
       COOKIES: "true"
       PARAM_VALUE: "-p default_ttl=600" # 600 sec = 10 min * 60 sec/min
     depends_on:
       - tileserv
-
-#  plumber:
-#    container_name: ws-plumber
-#    build: ./plumber
-    #volumes:
-    #  - shiny-apps:/srv/shiny-server
-#    restart: unless-stopped
-#    environment:
-#      VIRTUAL_HOST: api.$HOST
-#    ports:
-#      - 8888:8000
