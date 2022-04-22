@@ -11,5 +11,5 @@ api.whalesafe.com {
 }
 
 tile.whalesafe.com {
-  reverse_proxy pg_tileserv:6081
+  reverse_proxy tilecache:6081
 }
