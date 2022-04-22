@@ -73,6 +73,16 @@ services:
       - postgis
     ports:
       - 7800:7800
+      
+  featureserv:
+    container_name: featureserv
+    environment:
+      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
+    depends_on:
+      - postgis
+    ports:
+      - 9000:9000
 
   tilecache:
     container_name: tilecache

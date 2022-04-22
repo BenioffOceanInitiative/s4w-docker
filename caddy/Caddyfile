@@ -13,3 +13,7 @@ api.whalesafe.com {
 tile.whalesafe.com {
   reverse_proxy tilecache:6081
 }
+
+feature.whalesafe.com {
+  reverse_proxy featureserv:9000
+}
