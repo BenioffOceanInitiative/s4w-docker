@@ -1,0 +1,15 @@
+rstudio.whalesafe.com {
+  reverse_proxy rstudio:8787
+}
+
+shiny.whalesafe.com {
+  reverse_proxy rstudio:3838
+}
+
+api.whalesafe.com {
+  reverse_proxy rstudio:8888
+}
+
+tile.whalesafe.com {
+  reverse_proxy pg_tileserv:6081
+}
