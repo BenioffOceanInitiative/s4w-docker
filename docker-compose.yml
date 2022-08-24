@@ -42,13 +42,14 @@ services:
 
   postgis:
     container_name: postgis
-    image: kartoza/postgis:11.0-2.5
+    image: postgis/postgis:latest
     environment:
       POSTGRES_DBNAME: gis
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: $PASSWORD
     volumes:
       - postgis-data:/var/lib/postgresql
+      - ./postgis/postgresql.conf:/etc/postgresql/postgresql.conf
       - share:/share
     restart: unless-stopped
     healthcheck:

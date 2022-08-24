@@ -485,3 +485,14 @@ local               ws-docker_wordpress-html
   - cron job to renew
 - add phpmyadmin for web interface to mysql wordpress database
   - [Setting up WordPress with Docker - Containerizers](https://cntnr.io/setting-up-wordpress-with-docker-262571249d50)
+  
+
+## Upgrade server software 2022-08-24
+
+```bash
+docker exec -it postgis bash
+psql -U admin -h localhost
+pg_dump -Fc gis -U admin -h localhost > /share/gis_$(date +%Y-%m-%d).dump
+
+docker exec postgis pg_dump -Fc gis -U admin -h localhost > /share/gis_$(date +%Y-%m-%d).dump
+```
