@@ -490,9 +490,27 @@ local               ws-docker_wordpress-html
 ## Upgrade server software 2022-08-24
 
 ```bash
+# dump database
 docker exec -it postgis bash
 psql -U admin -h localhost
 pg_dump -Fc gis -U admin -h localhost > /share/gis_$(date +%Y-%m-%d).dump
 
-docker exec postgis pg_dump -Fc gis -U admin -h localhost > /share/gis_$(date +%Y-%m-%d).dump
+# stop all running containers
+docker stop $(docker ps -q)
+
+# edit docker-compose.yml, git push & pull on server
+
+# launch
+cd ~/ws-docker
+docker-compose up -d
+
+# restore database
+docker exec -it postgis bash
+# test connection
+psql -U admin -h localhost # \q # to quit
+# create db
+createdb -U admin gis
+# restore db
+pg_restore -U admin -h localhost --verbose --create --dbname=gis '/share/gis_2022-08-24.dump'
+
 ```
