@@ -68,9 +68,12 @@ RUN if [ ! -d "ws-apps" ] ; then \
 # run api
 #RUN Rscript /share/github/ws-api/run_api.R &
 
+# install packages for ws-api/bq2pg.py
+RUN R -q -e 'reticulate::py_install(c("pandas", "pyarrow", "google-cloud-bigquery", "tzlocal", "pandas-gbq", "pyarrow", "sqlalchemy", "psycopg2-binary", "python-dateutil", "oauth2client", "google-auth-httplib2", "google-auth-oauthlib", "google-api-python-client"))'
+
 # bigquery to postgis script bq2pg.py
 RUN apt-get update && apt-get install -y cron python3-pip
-RUN pip3 install pandas sqlalchemy psycopg2 google-cloud-bigquery tzlocal
+# RUN pip3 install pandas sqlalchemy psycopg2 google-cloud-bigquery tzlocal
 RUN ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 COPY bq2pg_cron /etc/cron.d/bq2pg_cron
 RUN chmod 0644 /etc/cron.d/bq2pg_cron
