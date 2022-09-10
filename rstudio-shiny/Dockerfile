@@ -1,11 +1,13 @@
-# `etc/cont-init.d/add: No such file or directory` with 4.0.0
-#   https://github.com/rocker-org/rocker-versioned/issues/219#issuecomment-633680843
-FROM rocker/geospatial:3.6.3
-MAINTAINER "Ben Best" ben@ecoquants.com
+FROM rocker/geospatial:latest
+
+# https://github.com/rocker-org/rocker-versioned2/tree/master/scripts
+RUN /rocker_scripts/install_python.sh
+RUN /rocker_scripts/install_shiny_server.sh
+EXPOSE 3838
 
 # install extra packages 
 RUN install2.r --error \
-  # for shiny:
+  bslib \
   dbplyr \
   DBI \
   DT \
@@ -13,16 +15,26 @@ RUN install2.r --error \
   glue \
   gstat \
   here \
+  httr2 \
+  htmltools \
   httpuv \
   leaflet \
+  librarian \
+  lubridate \
   plumber \
+  readr \
+  reticulate \
+  rhandsontable \
   Rcpp \
   RColorBrewer \
   RPostgres \
   shiny \
   shinydashboard \
+  shinyjs \
+  shinyWidgets \
+  tidyverse \
+  viridis \
   units
-  
   # already included: https://tidyverse.tidyverse.org
   #   dplyr
   #   lubridate

@@ -25,7 +25,6 @@ services:
   rstudio:
     container_name: rstudio
     build: ./rstudio-shiny
-    image: bdbest/rstudio-shiny:ws
     volumes:
       - shiny-apps:/srv/shiny-server
       - share:/share
