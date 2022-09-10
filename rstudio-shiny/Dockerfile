@@ -1,9 +1,11 @@
 FROM rocker/geospatial:latest
 
+RUN ls -la /
+
 # https://github.com/rocker-org/rocker-versioned2/tree/master/scripts
-RUN /scripts/install_python.sh
-RUN /scripts/install_quarto.sh
-RUN /scripts/install_shiny_server.sh
+RUN /rocker_scripts/install_python.sh
+RUN /rocker_scripts/install_quarto.sh
+RUN /rocker_scripts/install_shiny_server.sh
 EXPOSE 3838
 
 # install extra packages 
