@@ -1,18 +1,12 @@
 FROM rocker/geospatial:latest
 
-COPY scripts /rocker_scripts
-
-RUN ls -la /
-
-RUN ls -la .
-
-RUN ls -la scripts
-
-RUN ls -la rocker_scripts
-
+# COPY scripts /rocker_scripts
+# RUN ls -la /
+# RUN ls -la .
+# RUN ls -la scripts
+# RUN ls -la rocker_scripts
 
 # https://github.com/rocker-org/rocker-versioned2/tree/master/scripts
-
 RUN /rocker_scripts/install_python.sh
 RUN /rocker_scripts/install_quarto.sh
 RUN /rocker_scripts/install_shiny_server.sh
