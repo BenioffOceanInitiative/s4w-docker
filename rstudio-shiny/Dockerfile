@@ -1,4 +1,4 @@
-FROM rocker/geospatial:latest
+FROM ghcr.io/rocker-org/geospatial:latest
 
 # COPY scripts /rocker_scripts
 # RUN ls -la /
