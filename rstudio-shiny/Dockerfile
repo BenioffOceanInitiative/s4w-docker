@@ -55,9 +55,6 @@ RUN install2.r --error \
   #   sp
   #   tmap
   
-# add Shiny, per https://github.com/rocker-org/rocker/issues/235#issuecomment-299036810
-RUN export ADD=shiny && bash /etc/cont-init.d/add
-
 # github repos
 RUN mkdir -p /share/github
 WORKDIR /share/github
