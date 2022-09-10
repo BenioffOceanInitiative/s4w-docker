@@ -1,6 +1,7 @@
 FROM rocker/geospatial:latest
 
 RUN ls -la /
+RUN ls -la .
 
 # https://github.com/rocker-org/rocker-versioned2/tree/master/scripts
 RUN /rocker_scripts/install_python.sh
