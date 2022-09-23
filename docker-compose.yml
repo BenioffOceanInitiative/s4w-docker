@@ -88,10 +88,12 @@ services:
       - 6081:6081 # tile.
     environment:
       BACKENDS: "tileserv:7800"
+      BACKENDS_PROBE_INTERVAL: "100s"
+      BACKENDS_PROBE_TIMEOUT: "1s"
       DNS_ENABLED: "false"
       COOKIES: "true"
       # http://varnish-cache.org/docs/6.0/reference/varnishd.html#cli-timeout
-      PARAM_VALUE: "-p default_ttl=43200 connect_timeout=7 timeout_idle=10 timeout_linger=0.1" # 600 sec = 10 min * 60 sec/min #  # 43200 sec = 12 * 60* 60 = 12 hrs 
+      PARAM_VALUE: "-p default_ttl=43200 -p connect_timeout=7 -p timeout_idle=10 -p timeout_linger=0.1" # 600 sec = 10 min * 60 sec/min #  # 43200 sec = 12 * 60* 60 = 12 hrs 
       # connect_timeout -- Units: seconds; Default: 3.500
       # timeout_idle -- Units: seconds; Default: 5.000
       # timeout_linger -- Units: seconds; Default: 0.050
