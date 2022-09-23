@@ -73,6 +73,9 @@ services:
       dockerfile: Dockerfile.alpine
       args:
         VERSION: latest
+    command: "--config /app/pg_tileserv_config.toml"
+    volumes:
+      - ./pg_tileserv/pg_tileserv_config.toml:/app/pg_tileserv_config.toml:ro
     depends_on:
       - postgis
     ports:
