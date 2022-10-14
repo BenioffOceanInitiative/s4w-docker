@@ -1,3 +1,5 @@
+cors
+
 rstudio.whalesafe.com {
         reverse_proxy rstudio:8787
 }
