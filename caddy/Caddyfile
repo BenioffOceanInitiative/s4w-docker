@@ -1,5 +1,7 @@
-{
-        cors
+(cors) {
+        @origin header Origin {args.0}
+        header @origin Access-Control-Allow-Origin "{args.0}"
+        header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
 }
 
 rstudio.whalesafe.com {
@@ -21,4 +23,5 @@ tile.whalesafe.com {
 file.whalesafe.com {
         root * /share/www_file
         file_server browse
+        import cors file.whalesafe.com
 }
