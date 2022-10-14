@@ -1,20 +1,20 @@
 rstudio.whalesafe.com {
-  reverse_proxy rstudio:8787
+        reverse_proxy rstudio:8787
 }
 
 shiny.whalesafe.com {
-  reverse_proxy rstudio:3838
+        reverse_proxy rstudio:3838
 }
 
 api.whalesafe.com {
-  reverse_proxy rstudio:8888
+        reverse_proxy rstudio:8888
 }
 
 tile.whalesafe.com {
-  reverse_proxy tilecache:6081
+        reverse_proxy tilecache:6081
 }
 
 file.whalesafe.com {
-  root * /share/www_file
-  file_server browse
+        root * /share/www_file
+        file_server browse
 }
