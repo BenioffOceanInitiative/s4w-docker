@@ -16,5 +16,5 @@ tile.whalesafe.com {
 
 file.whalesafe.com {
         root * /share/www_file
-        file_server
+        file_server browse
 }
