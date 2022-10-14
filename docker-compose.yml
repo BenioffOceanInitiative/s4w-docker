@@ -1,7 +1,6 @@
 version: '3.3'
 
 volumes:
-  share:
   caddy_data:
   caddy_config:
   postgis-data:
@@ -27,7 +26,7 @@ services:
     build: ./rstudio-shiny
     volumes:
       - shiny-apps:/srv/shiny-server
-      - share:/share
+      - /share:/share
     restart: unless-stopped
     environment:
       ROOT: 'true'
