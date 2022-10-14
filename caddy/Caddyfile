@@ -14,6 +14,11 @@ tile.whalesafe.com {
   reverse_proxy tilecache:6081
 }
 
-feature.whalesafe.com {
-  reverse_proxy featureserv:9000
+file.whalesafe.com {
+  root * /share/www_file
+  file_server browse
+}
+
+file.whalesafe.com {
+  reverse_proxy tilecache:6081
 }
