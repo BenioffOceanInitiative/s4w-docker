@@ -18,7 +18,3 @@ file.whalesafe.com {
   root * /share/www_file
   file_server browse
 }
-
-file.whalesafe.com {
-  reverse_proxy tilecache:6081
-}
