@@ -1,6 +1,7 @@
 version: '3.3'
 
 volumes:
+  share:
   caddy_data:
   caddy_config:
   postgis-data:
@@ -19,7 +20,7 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-      - /share:/share   
+      - share:/share   
 
   rstudio:
     container_name: rstudio
