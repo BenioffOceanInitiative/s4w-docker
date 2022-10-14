@@ -48,7 +48,7 @@ services:
     volumes:
       - postgis-data:/var/lib/postgresql
       - ./postgis/postgresql.conf:/etc/postgresql/postgresql.conf
-      - share:/share
+      - /share:/share
     shm_size: 2gb
     restart: unless-stopped
     healthcheck:
