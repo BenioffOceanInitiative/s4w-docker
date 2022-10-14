@@ -23,5 +23,5 @@ tile.whalesafe.com {
 file.whalesafe.com {
         root * /share/www_file
         file_server browse
-        import cors file.whalesafe.com
+        import cors *
 }
