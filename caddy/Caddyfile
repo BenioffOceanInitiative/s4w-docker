@@ -1,3 +1,6 @@
+root * /share/www_file
+file_server
+
 rstudio.whalesafe.com {
         reverse_proxy rstudio:8787
 }
