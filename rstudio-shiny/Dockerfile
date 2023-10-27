@@ -8,6 +8,7 @@ FROM ghcr.io/rocker-org/geospatial:latest
 
 # https://github.com/rocker-org/rocker-versioned2/tree/master/scripts
 RUN /rocker_scripts/install_python.sh
+RUN /rocker_scripts/install_pyenv.sh
 RUN /rocker_scripts/install_quarto.sh
 RUN /rocker_scripts/install_shiny_server.sh
 EXPOSE 3838

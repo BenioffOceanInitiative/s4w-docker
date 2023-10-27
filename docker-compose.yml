@@ -63,7 +63,7 @@ services:
   tileserv:
     container_name: tileserv
     environment:
-      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+      DATABASE_URL: postgres://postgres:$PASSWORD@34.136.186.22:5432/whalesafe
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
       MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
       CacheTTL: 600          # matching with tilecache's default_ttl below
