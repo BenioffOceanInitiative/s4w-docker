@@ -59,8 +59,28 @@ Uses: https://github.com/ekalinin/github-markdown-toc
 1. SSH, eg for Ben:
     ```bash
     
+    
     ssh -i ~/.ssh/id_rsa.pem bbest@ec2-34-220-29-172.us-west-2.compute.amazonaws.com
     ```
+
+### NEW
+
+Google cloud via Terminal. 
+
+Check:
+
+```bash
+# check user and project
+gcloud init
+# account: ben@ecoquants.com
+# project: benioff-ocean-initiative
+```
+
+Open SSH:
+
+```bash
+gcloud compute ssh instance-1
+```
 
 ## Install docker, docker-compose
 
