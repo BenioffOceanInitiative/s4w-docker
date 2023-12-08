@@ -97,7 +97,7 @@ services:
       # connect_timeout -- Units: seconds; Default: 3.500
       # timeout_idle    -- Units: seconds; Default: 5.000
       # timeout_linger  -- Units: seconds; Default: 0.050
-      AUTOKILL_CRON: "10 13 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R
+      AUTOKILL_CRON: "0 22 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R in crontab
     depends_on:
       - tileserv
       
