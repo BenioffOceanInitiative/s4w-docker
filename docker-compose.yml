@@ -111,16 +111,16 @@ services:
     depends_on:
       - tileserv
       
-  featureserv:
-    # serve GeoJSON from PostGIS for use in Leaflet
-    container_name: featureserv:20231017  # last updated: 2023-12-15
-    environment:
-      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
-      # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
-      LimitMax: 1000000
-    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
-    depends_on:
-      - postgis
-    ports:
-      - 9000:9000
+  # featureserv:
+  #   # serve GeoJSON from PostGIS for use in Leaflet
+  #   container_name: featureserv:20231017  # last updated: 2023-12-15
+  #   environment:
+  #     DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+  #     # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
+  #     LimitMax: 1000000
+  #   image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
+  #   depends_on:
+  #     - postgis
+  #   ports:
+  #     - 9000:9000
 
