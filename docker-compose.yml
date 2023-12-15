@@ -10,7 +10,7 @@ volumes:
 services:
 
   caddy:
-    container_name: caddy
+    container_name: caddy:2.7.6  # last updated: 2023-12-15
     image: caddy:latest
     ports:
       - "80:80"
@@ -37,11 +37,19 @@ services:
     ports:
       - 8787:8787 # rstudio.
       - 3838:3838 # shiny.
+
+  plumber:
+    container_name: plumber
+    build: ./plumber
+    volumes:
+      - /share:/share
+    restart: always
+    ports:
       - 8888:8888 # api.
 
   postgis:
     container_name: postgis
-    image: postgis/postgis:latest
+    image: postgis/postgis:16-3.4  # last updated: 2023-12-15
     environment:
       POSTGRES_DBNAME: gis
       POSTGRES_USER: admin
@@ -65,17 +73,18 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:$PASSWORD@34.136.186.22:5432/whalesafe
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
-      MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
+      # MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
       CacheTTL: 600          # matching with tilecache's default_ttl below
-    image: pramsey/pg_tileserv:latest
-    build:
-      context: ./pg_tileserv
-      dockerfile: Dockerfile.alpine
-      args:
-        VERSION: latest
-    command: "--config /app/pg_tileserv_config.toml"
+    image: pramsey/pg_tileserv:20231121  # last updated: 2023-12-15
+    # build:
+    #   context: ./pg_tileserv
+    #   dockerfile: Dockerfile.alpine
+    #   args:
+    #     VERSION: latest
+    # command: "--config /app/pg_tileserv_config.toml"
     volumes:
-      - ./pg_tileserv/pg_tileserv_config.toml:/app/pg_tileserv_config.toml:ro
+      # - ./pg_tileserv/pg_tileserv_config.toml:/app/pg_tileserv_config.toml:ro
+      - /share:/share
     depends_on:
       - postgis
     ports:
@@ -83,7 +92,7 @@ services:
       
   tilecache:
     container_name: tilecache
-    image: eeacms/varnish
+    image: eeacms/varnish:7.4-1.1  # last updated: 2023-12-15
     ports:
       - 6081:6081 # tile.
     environment:
@@ -101,15 +110,16 @@ services:
     depends_on:
       - tileserv
       
-  featureserv:
-    container_name: featureserv
-    environment:
-      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
-      # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
-      LimitMax: 1000000
-    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
-    depends_on:
-      - postgis
-    ports:
-      - 9000:9000
+  # featureserv:
+  #   # serve GeoJSON from PostGIS for use in Leaflet
+  #   container_name: featureserv:20231017  # last updated: 2023-12-15
+  #   environment:
+  #     DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+  #     # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
+  #     LimitMax: 1000000
+  #   image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
+  #   depends_on:
+  #     - postgis
+  #   ports:
+  #     - 9000:9000
 

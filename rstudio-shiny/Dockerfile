@@ -1,4 +1,4 @@
-FROM ghcr.io/rocker-org/geospatial:latest
+FROM ghcr.io/rocker-org/geospatial:4.2.3  # last updated: 2023-12-15
 
 # COPY scripts /rocker_scripts
 # RUN ls -la /
