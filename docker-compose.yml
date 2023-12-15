@@ -106,20 +106,21 @@ services:
       # connect_timeout -- Units: seconds; Default: 3.500
       # timeout_idle    -- Units: seconds; Default: 5.000
       # timeout_linger  -- Units: seconds; Default: 0.050
-      AUTOKILL_CRON: "0 22 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R in crontab
+      # AUTOKILL_CRON: "0 22 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R in crontab
+      # TODO: setup alternative crontab on docker host to restart this container
     depends_on:
       - tileserv
       
-  # featureserv:
-  #   # serve GeoJSON from PostGIS for use in Leaflet
-  #   container_name: featureserv:20231017  # last updated: 2023-12-15
-  #   environment:
-  #     DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
-  #     # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
-  #     LimitMax: 1000000
-  #   image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
-  #   depends_on:
-  #     - postgis
-  #   ports:
-  #     - 9000:9000
+  featureserv:
+    # serve GeoJSON from PostGIS for use in Leaflet
+    container_name: featureserv:20231017  # last updated: 2023-12-15
+    environment:
+      DATABASE_URL: postgres://admin:$PASSWORD@postgis:5432/gis
+      # config: https://access.crunchydata.com/documentation/pg_featureserv/1.2.0/installation/configuration/
+      LimitMax: 1000000
+    image: pramsey/pg_featureserv:latest # https://github.com/CrunchyData/pg_featureserv
+    depends_on:
+      - postgis
+    ports:
+      - 9000:9000
 
