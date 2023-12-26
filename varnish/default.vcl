@@ -2,5 +2,5 @@ vcl 4.1;
 
 backend default {
     .host = "tileserv";
-    .port = "6081";
+    .port = "7800";
 }
