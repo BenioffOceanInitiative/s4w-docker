@@ -4,7 +4,8 @@ LABEL org.opencontainers.image.authors="Docker User <docker@user.org>"
 
 RUN R -e "install.packages(c('librarian','DBI','dplyr','glue','here','lubridate','readr','stringr','RPostgres'))"
 
-CMD ["/share/github/ws-api/run_api.R"]
+RUN apt-get update -qq && apt-get install -y \
+  libpq5
 
 #   FROM rstudio/plumber:latest
 #   RUN apt-get update -qq && apt-get install -y \
@@ -13,3 +14,6 @@ CMD ["/share/github/ws-api/run_api.R"]
 #   COPY . /api
 #   # set default startup command to run the app's "plumber.R" file
 #   CMD ["/api/plumber.R"]
+
+# set default startup command to run the app's "plumber.R" file
+CMD ["/share/github/ws-api/run_api.R"]
