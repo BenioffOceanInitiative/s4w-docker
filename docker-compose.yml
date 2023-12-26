@@ -99,8 +99,10 @@ services:
       - "./varnish/default.vcl:/etc/varnish/default.vcl"
     ports:
       - 6081:6081 # tile.whalesafe.com
-    tmpfs:
-      - /var/lib/varnish:exec
+    # tmpfs is a temporary file storage paradigm that keeps all files in virtual memory.
+    #   commented off b/c getting `docker logs tilecache` result of: Permission denied
+    # tmpfs:
+    #   - /var/lib/varnish:exec
     environment:
       - VARNISH_SIZE=2G  
     command: "-p default_keep=43200" # 60*60*12 = 43200 sec = 12 hrs
