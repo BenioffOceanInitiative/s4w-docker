@@ -75,7 +75,7 @@ services:
       # config: https://github.com/CrunchyData/pg_tileserv#configuration-file
       # MaxFeaturesPerTile: -1 # Limit number of features requested (-1 = no limit; default: 10000)
       CacheTTL: 600          # matching with tilecache's default_ttl below
-    image: pramsey/pg_tileserv:20231121  # last updated: 2023-12-15
+    image: pramsey/pg_tileserv:20231005  # last updated: 2023-12-26
     # build:
     #   context: ./pg_tileserv
     #   dockerfile: Dockerfile.alpine
