@@ -10,8 +10,8 @@ volumes:
 services:
 
   caddy:
-    container_name: caddy:2.7.6  # last updated: 2023-12-15
-    image: caddy:latest
+    container_name: caddy
+    image: caddy:2.7.6  # last updated: 2023-12-15
     ports:
       - "80:80"
       - "443:443"
