@@ -93,24 +93,23 @@ services:
   tilecache:
     container_name: tilecache
     image: varnish:7.4.2  # last updated: 2023-12-26
-    # https://www.varnish-software.com/developers/tutorials/running-varnish-docker/
-    environment:
-      VARNISH_HTTP_PORT: 6081
     volumes:
       - /share:/share
       - "./varnish/default.vcl:/etc/varnish/default.vcl"
     ports:
       - 6081:6081 # tile.whalesafe.com
-    # tmpfs is a temporary file storage paradigm that keeps all files in virtual memory.
-    #   commented off b/c getting `docker logs tilecache` result of: Permission denied
-    # tmpfs:
-    #   - /var/lib/varnish:exec
     environment:
-      - VARNISH_SIZE=2G  
+      VARNISH_SIZE: 2G  
+      VARNISH_HTTP_PORT: 6081
     command: "-p default_keep=43200" # 60*60*12 = 43200 sec = 12 hrs
     restart: always
     depends_on:
       - "tileserv"
+    # https://www.varnish-software.com/developers/tutorials/running-varnish-docker/
+    # tmpfs is a temporary file storage paradigm that keeps all files in virtual memory.
+    #   commented off b/c getting `docker logs tilecache` result of: Permission denied
+    # tmpfs:
+    #   - /var/lib/varnish:exec
     # image: eeacms/varnish:7.4-1.1  # last updated: 2023-12-15
     # environment:
     #   BACKENDS: "tileserv:7800"
