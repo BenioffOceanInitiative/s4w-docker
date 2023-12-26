@@ -2,7 +2,7 @@
 FROM rstudio/plumber:v1.2.0
 LABEL org.opencontainers.image.authors="Docker User <docker@user.org>"
 
-RUN R -e "install.packages('DBI','dplyr','glue','here','lubridate','readr','stringr','RPostgres')"
+RUN R -e "install.packages(c('DBI','dplyr','glue','here','lubridate','readr','stringr','RPostgres'))"
 
 CMD ["/share/github/ws-api/run_api.R"]
 
