@@ -92,24 +92,37 @@ services:
       
   tilecache:
     container_name: tilecache
-    image: eeacms/varnish:7.4-1.1  # last updated: 2023-12-15
+    image: varnish:7.4.2  # last updated: 2023-12-26
+    # https://www.varnish-software.com/developers/tutorials/running-varnish-docker/
+    volumes:
+      - /share:/share
+      - "./varnish/default.vcl:/etc/varnish/default.vcl"
     ports:
-      - 6081:6081 # tile.
+      - 6081:6081 # tile.whalesafe.com
+    tmpfs:
+      - /var/lib/varnish:exec
     environment:
-      BACKENDS: "tileserv:7800"
-      BACKENDS_PROBE_INTERVAL: "100s"
-      BACKENDS_PROBE_TIMEOUT: "1s"
-      DNS_ENABLED: "false"
-      COOKIES: "true"
-      # http://varnish-cache.org/docs/6.0/reference/varnishd.html#cli-timeout
-      PARAM_VALUE: "-p default_ttl=43200 -p connect_timeout=7 -p timeout_idle=10 -p timeout_linger=0.1" # 600 sec = 10 min * 60 sec/min #  # 43200 sec = 12 * 60* 60 = 12 hrs 
-      # connect_timeout -- Units: seconds; Default: 3.500
-      # timeout_idle    -- Units: seconds; Default: 5.000
-      # timeout_linger  -- Units: seconds; Default: 0.050
-      # AUTOKILL_CRON: "0 22 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R in crontab
-      # TODO: setup alternative crontab on docker host to restart this container
+      - VARNISH_SIZE=2G  
+    command: "-p default_keep=43200" # 60*60*12 = 43200 sec = 12 hrs
+    restart: always
     depends_on:
-      - tileserv
+      - "tileserv"
+    # image: eeacms/varnish:7.4-1.1  # last updated: 2023-12-15
+    # environment:
+    #   BACKENDS: "tileserv:7800"
+    #   BACKENDS_PROBE_INTERVAL: "100s"
+    #   BACKENDS_PROBE_TIMEOUT: "1s"
+    #   DNS_ENABLED: "false"
+    #   COOKIES: "true"
+    #   # http://varnish-cache.org/docs/6.0/reference/varnishd.html#cli-timeout
+    #   PARAM_VALUE: "-p default_ttl=43200 -p connect_timeout=7 -p timeout_idle=10 -p timeout_linger=0.1" # 600 sec = 10 min * 60 sec/min #  # 43200 sec = 12 * 60* 60 = 12 hrs 
+    #   # connect_timeout -- Units: seconds; Default: 3.500
+    #   # timeout_idle    -- Units: seconds; Default: 5.000
+    #   # timeout_linger  -- Units: seconds; Default: 0.050
+    #   # AUTOKILL_CRON: "0 22 * * *"  # crontab to force a recreation after pg_matview_zones_dates.R in crontab
+    #   # TODO: setup alternative crontab on docker host to restart this container
+    # depends_on:
+    #   - tileserv
       
   # featureserv:
   #   # serve GeoJSON from PostGIS for use in Leaflet
