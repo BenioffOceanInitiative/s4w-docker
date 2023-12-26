@@ -49,7 +49,7 @@ services:
 
   postgis:
     container_name: postgis
-    image: postgis/postgis:20231005  # last updated: 2023-12-26
+    image: postgis/postgis:14-3.4  # last updated: 2023-12-26
     environment:
       POSTGRES_DBNAME: gis
       POSTGRES_USER: admin
