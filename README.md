@@ -181,7 +181,115 @@ sudo chgrp -R staff /usr/local/lib/R/library
 sudo chmod g+w /usr/local/lib/R/library
 ```
 
+## `rstudio` docker container updates
 
+If the `rstudio` docker container gets wiped out or upgraded, then the following commands also need to be run in order to restore full working order.
+
+### install tippecanoe
+
+```bash
+cd /share/github/tippecanoe
+make -B
+make install
+```
+
+### install Python modules
+
+Install Python modules used by various scripts, especially in crontab (`/share/github/ws-api/crontab.txt`).
+
+```bash
+# switch user to root to install modules system-wide
+sudo su -
+
+# /share/github/ws-api/bq2pg.py
+/usr/bin/pip install --upgrade pandas google-cloud-bigquery pandas-gbq pyarrow \
+  sqlalchemy psycopg2-binary python-dateutil oauth2client google-auth-httplib2 \
+  google-auth-oauthlib google-api-python-client db-dtypes
+
+# /share/github/ws-api/bq2pg_v4.py
+/usr/local/bin/pip3 install --upgrade numpy pandas google-cloud-bigquery \
+  pandas-gbq pyarrow sqlalchemy psycopg2-binary python-dateutil oauth2client \
+  google-auth-httplib2 google-auth-oauthlib google-api-python-client db-dtypes
+
+# /share/github/ws-sql/run_sql.py
+/usr/bin/pip3 install --upgrade \
+  pandas-gbq \
+  pandas db-dtypes pyarrow sqlalchemy psycopg2-binary python-dateutil \
+  oauth2client google-cloud-bigquery google-auth-httplib2 google-auth-oauthlib \
+  google-api-python-client
+```
+
+### install/update R packages
+
+Install R packages used by various scripts, especially in crontab (`/share/github/ws-api/crontab.txt`).
+
+First, go into rstudio.whalesafe.com and updated all R packages to the latest version by going to Packages pane, and clicking the **Update** button.
+
+
+```R
+# /share/github/ws-sql/scrape_CAN.R
+librarian::shelf(
+  dplyr, glue, googlesheets4, here, httr2, janitor, lubridate, purrr, readr, rvest, stringr,
+  tibble, tidyr,
+  quiet = T)
+
+# /share/github/ws-sql/scrape_USA.R
+librarian::shelf(
+  digest, dplyr, glue, googlesheets4, here, httr2, janitor, lubridate, purrr,
+  readr, sf, stringr, tibble, tidyr, xml2,
+  quiet = T)
+  
+# /share/github/ws-api/pg2hextiles.R
+librarian::shelf(
+  DBI, dbplyr, dplyr, glue, here, lubridate, readr, RPostgres, sf, stringr, 
+  tibble, tidyr,
+  quiet = T)
+
+# /share/github/ws-api/pg_matview_zones_dates.R
+librarian::shelf(
+  DBI, dbplyr, dplyr, glue, googlesheets4, here, lubridate, readr, RPostgres, sf, stringr, 
+  tibble, tidyr,
+  quiet = T)
+```
+
+### enable crontab
+
+```bash
+# switch user to root to install modules system-wide
+sudo su -
+
+service cron restart
+```
+
+### run individual crontab entries
+
+```bash
+# switch user to root to install modules system-wide
+sudo su -
+
+# /share/github/ws-api/bq2pg.py
+/usr/bin/python3 /share/github/ws-api/bq2pg.py >> /share/log/bq2pg_log.txt 2>&1 &
+
+# /share/github/ws-api/bq2pg.py
+cd /share/github/ws-sql; /usr/local/bin/Rscript --vanilla scrape_CAN.R >> /share/log/scrape_CAN_log.txt 2>&1 &
+
+# /share/github/ws-sql/scrape_USA.R
+cd /share/github/ws-sql; /usr/local/bin/Rscript --vanilla scrape_USA.R >> /share/log/scrape_USA_log.txt 2>&1 &
+
+# /share/github/ws-sql/run_sql.py
+cd /share/github/ws-sql; /usr/bin/python3 run_sql.py ALL >> /share/log/run_sql_log.txt 2>&1
+
+# TODO: check run_sql_log.txt, run below
+
+# /share/github/ws-api/bq2pg_v4.py
+/usr/bin/python3 /share/github/ws-api/bq2pg_v4.py >> /share/log/bq2pg_v4_log.txt 2>&1
+
+# /share/github/ws-api/pg2hextiles.R
+cd /share/github/ws-api; /usr/local/bin/Rscript --vanilla pg2hextiles.R >> /share/log/pg2hextiles_log.txt 2>&1 & 
+
+# /share/github/ws-api/pg_matview_zones_dates.R
+cd /share/github/ws-api; /usr/local/bin/Rscript --vanilla pg_matview_zones_dates.R >> /share/log/pg_matview_zones_dates_log.txt 2>&1 &
+```
 
 ### OLD: Move docker storage
 
