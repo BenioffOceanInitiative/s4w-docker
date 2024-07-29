@@ -503,6 +503,20 @@ Try out services:
 
 ## Docker maintenance
 
+### Update api (plumber)
+
+Pull the latest code.
+
+Stop the plumber container:
+```bash 
+docker compose stop plumber
+```
+
+Rebuild and start the container:
+```bash
+docker compose up -d --no-deps --build plumber
+```
+
 ### Push docker image
 
 Since rstudio-shiny is a custom image `bdbest/rstudio-shiny:ws`, I [docker-compose push](https://docs.docker.com/compose/reference/push/) to [bdbest/rstudio-shiny:ws | Docker Hub](https://hub.docker.com/layers/bdbest/rstudio-shiny/ws/images/sha256-134b85760fc6f383309e71490be99b8a50ab1db6b0bc864861f9341bf6517eca).
